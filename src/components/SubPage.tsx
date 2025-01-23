@@ -28,18 +28,19 @@ interface PropsInterface {
     name: string
   }[];
   limit?: number;
-  showPagination?: boolean
+  showPagination?: boolean;
+  slug?: string
 }
 
-const SubPage = ({ title, category, links, subMenu, limit = 10, showPagination = true }: PropsInterface) => {
+const SubPage = ({ title, category, links, subMenu, limit = 10, showPagination = true, slug }: PropsInterface) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <SubPageComponent category={category} links={links} subMenu={subMenu} title={title} limit={limit} showPagination={showPagination} />
+      <SubPageComponent category={category} links={links} subMenu={subMenu} title={title} limit={limit} showPagination={showPagination} slug={slug} />
     </QueryClientProvider>
   )
 }
 
-const SubPageComponent = ({ category, links, subMenu, title, limit, showPagination }: PropsInterface) => {
+const SubPageComponent = ({ category, links, subMenu, title, limit, showPagination, slug }: PropsInterface) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pageFromUrl = searchParams.get('page') || '1';
@@ -52,9 +53,24 @@ const SubPageComponent = ({ category, links, subMenu, title, limit, showPaginati
     return data;
   };
 
+  const fetchTagArticles = async (page: number, tag?: string,) => {
+    const { data } = await axiosServer.get(`/article/all?tag=${tag}&page=${page}`);
+    return data;
+  };
+
+  const fetchAuthorrticles = async (page: number, author?: string,) => {
+    const { data } = await axiosServer.get(`/article/all?author=${author}&page=${page}`);
+    return data;
+  };
+
+
   const { isLoading, data, isError } = useQuery({
-    queryKey: [category, page],
-    queryFn: () => fetchCategoryArticles(category, page),
+    queryKey: [category, page, slug],
+    queryFn: () => category === "tag"
+      ? fetchTagArticles(page, slug)
+      : category === "author"
+        ? fetchAuthorrticles(page, slug)
+        : fetchCategoryArticles(category, page),
     staleTime: 60000,
     refetchOnWindowFocus: false,
     retry: 1,
