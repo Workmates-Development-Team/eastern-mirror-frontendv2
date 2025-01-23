@@ -39,7 +39,7 @@ export default function NavMenu({ links }: PropsType) {
                     {item.subLinks.map((subLink: SubLink, i: number) => (
                       <ListItem
                         key={i}
-                        href={ item.href === '/north-east'?subLink.href : item.href + subLink.href}
+                        href={ item.href === '/education'?subLink.href : item.href + subLink.href}
                         title={subLink.label}
                         className="whitespace-nowrap"
                       >
