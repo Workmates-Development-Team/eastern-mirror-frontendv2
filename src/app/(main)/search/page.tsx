@@ -99,7 +99,7 @@ const SearchComponent = () => {
                     </div>
                     <div className="">
                       <h3 className="text-xl font-bold mb-2">
-                        <Link href={"/details/" + article?.slug}>
+                        <Link href={"/" + article?.slug}>
                           {article.title}
                         </Link>
                       </h3>
@@ -117,7 +117,7 @@ const SearchComponent = () => {
                       </div>
                       <Link
                         className="text-[#002366] text-xs font-bold uppercase"
-                        href={"/details/" + article?.slug}
+                        href={"/" + article?.slug}
                       >
                         Read More
                       </Link>

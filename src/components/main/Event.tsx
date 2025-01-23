@@ -55,7 +55,7 @@ const Event = ({
                 i
               ) => (
                 <Link
-                  href={`/details/${item?.slug}`}
+                  href={`/${item?.slug}`}
                   key={i}
                   className="flex md:gap-4 gap-2.5"
                 >
@@ -97,7 +97,7 @@ export const CardVertical = ({
     title: string;
   };
 }) => (
-  <Link href={`/details/${data?.slug}`}>
+  <Link href={`/${data?.slug}`}>
     <div>
       <img
         src={getImageUrl(data.thumbnail)}

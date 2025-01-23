@@ -15,7 +15,7 @@ const Section3 = ({ data, heading, trending, watchNow, link }: PropsType) => {
   if (!data?.length) return null;
 
   const handleShare = async (item: any) => {
-    const shareUrl = `${window.location.origin}/details/${item?.slug}`;
+    const shareUrl = `${window.location.origin}/${item?.slug}`;
     const shareData = {
       title: item.title,
       text: item.title,
@@ -59,7 +59,7 @@ const Section3 = ({ data, heading, trending, watchNow, link }: PropsType) => {
 
         <div className="grid md:grid-cols-2 grid-cols-1 md:gap-7 gap-3 mt-2.5">
           <div className="relative">
-            <Link href={"/details/" + data[0]?.slug}>
+            <Link href={"/" + data[0]?.slug}>
               <img
                 className="w-full md:h-[375px] h-[200px] object-cover rounded-[7.07px]"
                 width={665}
@@ -78,7 +78,7 @@ const Section3 = ({ data, heading, trending, watchNow, link }: PropsType) => {
           </div>
 
           <div className="flex flex-col justify-center md:gap-6 gap-3">
-            <Link href={"/details/" + data[0]?.slug}>
+            <Link href={"/" + data[0]?.slug}>
               <h2 className="lora-bold md:text-2xl text-lg leading-tight md:leading-normal">
                 {data[0].title}
               </h2>
@@ -101,7 +101,7 @@ const Section3 = ({ data, heading, trending, watchNow, link }: PropsType) => {
 
         <div className="grid md:grid-cols-4 grid-cols-2 md:mt-6 mt-3 md:gap-10 gap-4">
           {data?.slice(1, 5)?.map((item: any, i: number) => (
-            <Link href={"/details/" + item?.slug} key={i}>
+            <Link href={"/" + item?.slug} key={i}>
               <div>
                 <img
                   src={getImageUrl(item.thumbnail)}
