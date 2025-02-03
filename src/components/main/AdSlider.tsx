@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from "react";
 
 import {
@@ -9,20 +11,41 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
+import axiosInstance from "@/utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import { getImageUrl } from "@/utils/getImageUrl";
+import Link from "next/link";
 
-const ads = [
-  {
-    thumbnail: "/images/ads/nathu.webp",
-  },
-  {
-    thumbnail: "/images/ads/nathu-2.webp",
-  },
-  {
-    thumbnail: "/images/ads/nathu-3.webp",
-  },
-];
+
+
+interface Ads {
+  _id: string;
+  link: string;
+  imageUrl: string;
+}
+
+interface Response {
+  items: Ads[];
+}
 
 export function AdSlider() {
+  const getAds = async (): Promise<Response> => {
+    const { data } = await axiosInstance.get(
+      `/ads/slider`
+    );
+    return data;
+  };
+
+  const {
+    data = {
+
+      items: [],
+    },
+  } = useQuery<Response>({
+    queryKey: ["slider",],
+    queryFn: () => getAds(),
+    staleTime: 300000,
+  });
   return (
     <Carousel
       plugins={[
@@ -33,17 +56,17 @@ export function AdSlider() {
       className="w-full max-w-xs relative"
     >
       <CarouselContent>
-        {ads.map((item, index) => (
+        {data.items.map((item, index) => (
           <CarouselItem key={index}>
-            <div className="">
+            <Link href={item.link} target="_blank" className="">
               <Image
-                className="w-full h-[530px] object-cover"
+                className="w-full h-[450px] object-cover"
                 width={293}
-                height={530}
-                src={item?.thumbnail}
+                height={450}
+                src={getImageUrl(item?.imageUrl)}
                 alt="image"
               />
-            </div>
+            </Link>
           </CarouselItem>
         ))}
       </CarouselContent>

@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    domains: ['api.easternmirrornagaland.com'],
+    domains: ['api.easternmirrornagaland.com', 'localhost'],
   },
 };
 

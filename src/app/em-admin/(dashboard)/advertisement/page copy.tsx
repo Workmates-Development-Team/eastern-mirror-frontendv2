@@ -43,7 +43,6 @@ const Advertisement = () => {
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = React.useState(false);
   const [sliders, setSliders] = useState<Ads[]>([]);
-  const [saveLoading, setSaveLoading]= useState(false)
 
   const [value, setValue] = React.useState(0);
 
@@ -131,7 +130,7 @@ const Advertisement = () => {
 
   const updateSlider = async () => {
     try {
-      setSaveLoading(true)
+   
         const { data } = await axiosInstance.put("/ads/slider/update", {
           items: sliders,
         });
@@ -139,8 +138,6 @@ const Advertisement = () => {
 
     } catch (error) {
       console.log(error);
-    } finally {
-      setSaveLoading(false)
     }
   };
 
@@ -179,9 +176,6 @@ const Advertisement = () => {
 
       if (result.isConfirmed) {
         const { data } = await axiosInstance.put("/ads/slider/remove/"+id);
-        setSliders((prev) =>
-          prev.filter((i) => i._id !== id)
-        );
         toast.success("Remove Successfully");
       }
     } catch (error: any) {
@@ -221,11 +215,8 @@ const Advertisement = () => {
         <CustomTabPanel value={value} index={0}>
           <div className="">
             <div className="flex justify-end mb-5">
-              <Button disabled={saveLoading} onClick={updateSlider} size="sm" className="ml-auto">
-                {
-                  saveLoading ? 'Saving...': 'Save Changes'
-                }
-                
+              <Button onClick={updateSlider} size="sm" className="ml-auto">
+                Save Changes
               </Button>
             </div>
             <DragDropContext onDragEnd={onDragEnd}>
@@ -261,7 +252,11 @@ const Advertisement = () => {
                               </Link>
 
                               <div
-                                onClick={() => handleRemoveFromSlider(item._id) }
+                                onClick={() => {
+                                  setSliders((prev) =>
+                                    prev.filter((i) => i._id !== item._id)
+                                  );
+                                }}
                                 className="bg-white/30 backdrop-blur-sm cursor-pointer absolute top-2 right-2 w-8 h-8 flex justify-center rounded-full items-center"
                               >
                                 {loading ? (
