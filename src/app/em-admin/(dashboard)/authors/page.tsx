@@ -3,7 +3,7 @@
 import AddAuthors from "@/components/admin/AddAuthors";
 import AuthorTable from "@/components/admin/table/AuthorTable";
 import { useAuthContext } from "@/context/AuthContext";
-import { useAuthorContext } from "@/context/AuthorContext";
+import { useAuthorContext } from "@/context/AppContext";
 import axiosInstance from "@/utils/axios";
 import React, { useState } from "react";
 

@@ -18,7 +18,7 @@ import axiosInstance from "@/utils/axios";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { getImageUrl } from "@/utils/getImageUrl";
-import { useAuthorContext } from "@/context/AuthorContext";
+import { useAuthorContext } from "@/context/AppContext";
 
 type AddAuthorsProps = {
   data?: {

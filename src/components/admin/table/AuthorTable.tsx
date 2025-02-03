@@ -19,7 +19,7 @@ import axiosInstance from "@/utils/axios";
 import toast from "react-hot-toast";
 import AddAuthors from "../AddAuthors";
 import { useAuthContext } from "@/context/AuthContext";
-import { useAuthorContext } from "@/context/AuthorContext";
+import { useAuthorContext } from "@/context/AppContext";
 
 export type Category = {
   id: string;

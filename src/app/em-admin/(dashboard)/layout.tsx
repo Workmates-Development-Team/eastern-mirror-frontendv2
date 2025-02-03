@@ -4,7 +4,7 @@ import AdminNavbar from "@/components/admin/Navbar";
 import AdminSidebar from "@/components/admin/Sidebar";
 import Loader from "@/components/Loader";
 import { useAuthContext } from "@/context/AuthContext";
-import { AuthorProvider } from "@/context/AuthorContext";
+import { AuthorProvider } from "@/context/AppContext";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 

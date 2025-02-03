@@ -10,6 +10,7 @@ import {
   Users,
   Video,
 } from "lucide-react";
+import { FcAdvertising } from "react-icons/fc";
 
 export const ADMIN_SIDEBAR_LINKS = [
   {
@@ -46,6 +47,11 @@ export const ADMIN_SIDEBAR_LINKS = [
     label: "Events",
     path: "/events",
     icon: () => <BookImage className="h-4 w-4" />,
+  },
+  {
+    label: "Advertisement",
+    path: "/advertisement",
+    icon: () => <FcAdvertising className="h-4 w-4" />,
   },
   {
     label: "Authors",

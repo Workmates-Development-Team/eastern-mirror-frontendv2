@@ -62,10 +62,11 @@ export default function CategoryFilter({
           aria-expanded={open}
           className="w-[170px] justify-between"
         >
+          <span className="truncate">
           {value
             ? categories.find((category: any) => category.value === value)
                 ?.label
-            : "All category"}
+            : "All category"}</span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

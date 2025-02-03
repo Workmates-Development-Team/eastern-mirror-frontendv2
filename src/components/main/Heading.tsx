@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Heading({ title }: PropsType) {
   return (
-    <div className="container px-4 md:px-6 flex items-center justify-center md:mt-20 mt-12 md:mb-10 mb-6">
+    <div className="container px-4 md:px-6 flex items-center justify-center md:mt-12 mt-8 md:mb-8 mb-4">
       <div className="flex-grow flex flex-col gap-1.5 md:gap-2 ">
         <div className="border-b-[0.7px] md:border-b border-[#a8a9aa] w-[97%]"></div>
         <div className="md:border-b-2 border-b border-dashed border-[#a8a9aa]"></div>
