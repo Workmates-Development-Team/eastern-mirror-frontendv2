@@ -17,7 +17,7 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const {setIsAuthenticate, setUser} = useAuthContext()
+    const {setIsAuthenticate, setUser, getProfile} = useAuthContext()
 
     // Formik for login form validation
     const formik = useFormik({
@@ -41,6 +41,7 @@ export default function Login() {
 
                 setUser(admin)
                 setIsAuthenticate(true)
+                getProfile()
 
                 sessionStorage.setItem("token", response.data.token);
                 setLoading(false);
