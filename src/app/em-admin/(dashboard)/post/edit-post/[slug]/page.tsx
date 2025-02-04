@@ -83,7 +83,7 @@ const EditPost = () => {
   };
 
   const { data: categories } = useQuery({
-    queryKey: ["categories-all"],
+    queryKey: ["categories-all-post"],
     queryFn: getCategories,
     staleTime: 60000,
     refetchOnWindowFocus: false,
