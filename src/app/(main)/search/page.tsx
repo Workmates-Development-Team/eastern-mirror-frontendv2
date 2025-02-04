@@ -34,8 +34,10 @@ const SearchComponent = () => {
 
   const fetchData = async () => {
     const { data } = await axiosServer.get(
-      `/article/all?search=${query}&limit=10&page=${page}`
+      `/article/search?search=${query}&limit=10&page=${page}`
     );
+
+    console.log(data)
     return data;
   };
 
