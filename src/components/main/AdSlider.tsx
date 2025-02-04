@@ -56,7 +56,7 @@ export function AdSlider() {
       className="w-full max-w-xs relative"
     >
       <CarouselContent>
-        {data.items.map((item, index) => (
+        {data?.items?.map((item, index) => (
           <CarouselItem key={index}>
             <Link href={item.link} target="_blank" className="">
               <Image
