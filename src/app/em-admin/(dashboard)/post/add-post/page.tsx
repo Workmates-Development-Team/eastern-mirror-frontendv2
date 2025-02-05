@@ -54,9 +54,13 @@ const AddPost = () => {
   const [category, setCategory] = useState<CategoryOption[]>([]);
   const [authors, setAuthors] = useState<AuthorProps[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [metaKeyWord, setMetaKeyWord] = useState<string[]>([]);
   const [thumbnail, setThumbnail] = useState("");
   const [selectedAuthor, setSelectedAuthor] = useState<string>("");
-  const [publishedAt, setpublishedAt] = useState<string>(new Date().toISOString());
+  const [excerpt, setexcerpt] = useState<string>("");
+  const [publishedAt, setpublishedAt] = useState<string>(
+    new Date().toISOString()
+  );
   const router = useRouter();
   const [plainText, setPlainText] = useState("");
 
@@ -85,8 +89,7 @@ const AddPost = () => {
     try {
       const { data } = await axiosInstance.get(`/author/all`);
       setAuthors(data?.authors);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -103,7 +106,6 @@ const AddPost = () => {
 
   const handleSubmit = async () => {
     try {
-      
       const slug = slugify(title);
 
       const formData = new FormData();
@@ -120,6 +122,8 @@ const AddPost = () => {
       formData.append("thumbnail", thumbnail);
       formData.append("publishedAt", publishedAt);
       formData.append("plainTextContent", plainText);
+      formData.append("excerpt", excerpt);
+      formData.append("metaKeyWord", JSON.stringify(metaKeyWord));
 
       const { data } = await axiosInstance.post("/article/add", formData, {
         headers: {
@@ -158,15 +162,17 @@ const AddPost = () => {
   const handleClearForm = () => {
     setTitle("");
     setValue("");
+    setexcerpt("");
     setCategory([]);
     setSelectedTags([]);
+    setMetaKeyWord([]);
     setSelectedAuthor("");
     sessionStorage.removeItem("postTitle");
     sessionStorage.removeItem("postContent");
     sessionStorage.removeItem("postMedia");
   };
 
-  console.log(publishedAt)
+  console.log(publishedAt);
   return (
     <div className="p-[50px]">
       <input
@@ -276,7 +282,6 @@ const AddPost = () => {
           />
         </div>
 
-
         <div className="flex flex-col gap-2 col-span-2">
           <Label htmlFor="author">Author</Label>
           <Autocomplete
@@ -325,8 +330,8 @@ const AddPost = () => {
         </div>
 
         <div className="flex flex-col gap-2  col-span-2">
-          <Label htmlFor="name">Publish Date &  Time</Label>
-         
+          <Label htmlFor="name">Publish Date & Time</Label>
+
           <input
             type="datetime-local"
             id="publishedAt"
@@ -335,9 +340,60 @@ const AddPost = () => {
             className="input"
           />
         </div>
+
+        <div className="flex flex-col gap-2  col-span-2">
+          <Label htmlFor="name">Meta Keyword</Label>
+          <Autocomplete
+            multiple
+            id="tags-filled"
+            options={[]?.map((option) => option)}
+            freeSolo
+            value={metaKeyWord}
+            onChange={(event, newValue) => {
+              setMetaKeyWord(newValue);
+            }}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => {
+                const { key, ...tagProps } = getTagProps({ index });
+                return (
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    key={key}
+                    {...tagProps}
+                  />
+                );
+              })
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                placeholder="Write meta keywords"
+              />
+            )}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2  col-span-2">
+          <Label htmlFor="name">Meta description</Label>
+
+          <TextField
+            multiline={true}
+            onChange={(e) => setexcerpt(e.target.value)}
+            variant="outlined"
+            value={excerpt}
+            placeholder="Write meta description"
+          />
+        </div>
       </div>
 
-      <TextEditor value={value} setValue={setValue} plainText={plainText} setPlainText={setPlainText} />
+      <TextEditor
+        value={value}
+        setValue={setValue}
+        plainText={plainText}
+        setPlainText={setPlainText}
+      />
 
       <div className="flex gap-4 mt-4">
         <Button

@@ -53,6 +53,8 @@ const EditPost = () => {
   const router = useRouter();
   const { slug } = useParams();
   const [plainText, setPlainText] = useState("");
+   const [excerpt, setexcerpt] = useState<string>("");
+   const [metaKeyWord, setMetaKeyWord] = useState<string[]>([]);
 
   const fetchData = async (slug: string) => {
     const { data } = await axiosServer.get("/article/by/" + slug);
@@ -71,6 +73,8 @@ const EditPost = () => {
     setTitle(data?.title);
     setValue(data?.content);
     setSelectedTags(data?.tags || []);
+    setMetaKeyWord(data?.metaKeyWord || []);
+    setexcerpt(data?.excerpt || '');
     setSelectedAuthor(data?.author?._id || "");
     setCategory(data?.category || []);
     setThumbnail(data?.thumbnail || "");
@@ -128,6 +132,8 @@ const EditPost = () => {
       formData.append("slug", slug);
       formData.append("thumbnail", thumbnail);
       formData.append("publishedAt", publishedAt);
+      formData.append("excerpt", excerpt);
+      formData.append("metaKeyWord", JSON.stringify(metaKeyWord));
 
       const { data } = await axiosInstance.put(
         "/article/edit/" + id,
@@ -302,6 +308,52 @@ const EditPost = () => {
             value={publishedAt}
             onChange={(e) => setpublishedAt(e.target.value)}
             className="input"
+          />
+        </div>
+
+        <div className="flex flex-col gap-2  col-span-2">
+          <Label htmlFor="name">Meta Keyword</Label>
+          <Autocomplete
+            multiple
+            id="tags-filled"
+            options={[]?.map((option) => option)}
+            freeSolo
+            value={metaKeyWord}
+            onChange={(event, newValue) => {
+              setMetaKeyWord(newValue);
+            }}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => {
+                const { key, ...tagProps } = getTagProps({ index });
+                return (
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    key={key}
+                    {...tagProps}
+                  />
+                );
+              })
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                placeholder="Write meta keywords"
+              />
+            )}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2  col-span-2">
+          <Label htmlFor="name">Meta description</Label>
+
+          <TextField
+            multiline={true}
+            onChange={(e) => setexcerpt(e.target.value)}
+            variant="outlined"
+            value={excerpt}
+            placeholder="Write meta description"
           />
         </div>
 
