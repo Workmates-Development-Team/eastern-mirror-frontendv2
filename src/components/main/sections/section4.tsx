@@ -15,7 +15,7 @@ const Section4 = ({ data, heading, link }: PropsType) => {
       <div className="container py-2 px-4 md:px-6 ">
         <div className="grid md:grid-cols-4 grid-cols-1 md:gap-7 gap-5">
           {data.map((item: any, i: number) => (
-            <StoryCard key={i} item={item} />
+            <StoryCard key={item._id} item={item} />
           ))}
           {link ? (
             <div className="flex justify-center md:col-span-4">

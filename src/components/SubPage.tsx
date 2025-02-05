@@ -1,18 +1,23 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from 'next/navigation';
-import Loader from './Loader';
-import BreadcrumbComponent from './BreadcrumbConponent';
-import Heading from './main/Heading';
+import React, { useState, useEffect } from "react";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
+import Loader from "./Loader";
+import BreadcrumbComponent from "./BreadcrumbConponent";
+import Heading from "./main/Heading";
 import { Pagination } from "@mui/material";
-import Link from 'next/link';
-import { getImageUrl } from '@/utils/getImageUrl';
-import { formatDate } from '@/utils/date';
-import { buttonVariants } from './ui/button';
-import { cn } from '@/lib/utils';
-import axiosServer from '@/utils/axiosServer';
+import Link from "next/link";
+import { getImageUrl } from "@/utils/getImageUrl";
+import { formatDate } from "@/utils/date";
+import { buttonVariants } from "./ui/button";
+import { cn } from "@/lib/utils";
+import axiosServer from "@/utils/axiosServer";
+import Image from "next/image";
 
 const queryClient = new QueryClient();
 
@@ -21,29 +26,53 @@ interface PropsInterface {
   category: string;
   links: {
     label: string;
-    href?: string
+    href?: string;
   }[];
   subMenu?: {
-    href: string,
-    name: string
+    href: string;
+    name: string;
   }[];
   limit?: number;
   showPagination?: boolean;
-  slug?: string
+  slug?: string;
 }
 
-const SubPage = ({ title, category, links, subMenu, limit = 10, showPagination = true, slug }: PropsInterface) => {
+const SubPage = ({
+  title,
+  category,
+  links,
+  subMenu,
+  limit = 10,
+  showPagination = true,
+  slug,
+}: PropsInterface) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <SubPageComponent category={category} links={links} subMenu={subMenu} title={title} limit={limit} showPagination={showPagination} slug={slug} />
+      <SubPageComponent
+        category={category}
+        links={links}
+        subMenu={subMenu}
+        title={title}
+        limit={limit}
+        showPagination={showPagination}
+        slug={slug}
+      />
     </QueryClientProvider>
-  )
-}
+  );
+};
 
-const SubPageComponent = ({ category, links, subMenu, title, limit, showPagination, slug }: PropsInterface) => {
+const SubPageComponent = ({
+  category,
+  links,
+  subMenu,
+  title,
+  limit,
+  showPagination,
+  slug,
+}: PropsInterface) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const pageFromUrl = searchParams.get('page') || '1';
+  const pageFromUrl = searchParams.get("page") || "1";
   const [page, setPage] = useState<number>(parseInt(pageFromUrl, 10));
 
   const fetchCategoryArticles = async (category: string, page: number) => {
@@ -53,22 +82,26 @@ const SubPageComponent = ({ category, links, subMenu, title, limit, showPaginati
     return data;
   };
 
-  const fetchTagArticles = async (page: number, tag?: string,) => {
-    const { data } = await axiosServer.get(`/article/all?tag=${tag}&page=${page}`);
+  const fetchTagArticles = async (page: number, tag?: string) => {
+    const { data } = await axiosServer.get(
+      `/article/all?tag=${tag}&page=${page}`
+    );
     return data;
   };
 
-  const fetchAuthorrticles = async (page: number, author?: string,) => {
-    const { data } = await axiosServer.get(`/article/all?author=${author}&page=${page}`);
+  const fetchAuthorrticles = async (page: number, author?: string) => {
+    const { data } = await axiosServer.get(
+      `/article/all?author=${author}&page=${page}`
+    );
     return data;
   };
-
 
   const { isLoading, data, isError } = useQuery({
     queryKey: [category, page, slug],
-    queryFn: () => category === "tag"
-      ? fetchTagArticles(page, slug)
-      : category === "author"
+    queryFn: () =>
+      category === "tag"
+        ? fetchTagArticles(page, slug)
+        : category === "author"
         ? fetchAuthorrticles(page, slug)
         : fetchCategoryArticles(category, page),
     staleTime: 60000,
@@ -81,21 +114,20 @@ const SubPageComponent = ({ category, links, subMenu, title, limit, showPaginati
   }, [pageFromUrl]);
 
   const updatePageInUrl = (newPage: number) => {
-    const params = new URLSearchParams({ ...Object.fromEntries(searchParams), page: newPage.toString() });
+    const params = new URLSearchParams({
+      ...Object.fromEntries(searchParams),
+      page: newPage.toString(),
+    });
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
     setPage(value);
     updatePageInUrl(value);
   };
-
-
-  // if (!isLoading && (!data?.articles?.length || !data)) {
-  //   <div className="container flex justify-center min-h-[50vh] mt-10">
-  //     <p>No data found</p>
-  //   </div>
-  // }
 
   if (isLoading) {
     return (
@@ -139,7 +171,9 @@ const SubPageComponent = ({ category, links, subMenu, title, limit, showPaginati
 
           <div className="md:mt-10 mt-8 flex flex-col md:gap-7 gap-4">
             {data?.articles?.length ? (
-              data?.articles?.map((item: any, i: string) => <Card key={i} data={item} />)
+              data?.articles?.map((item: any, i: string) => (
+                <Card key={item._id} data={item} />
+              ))
             ) : (
               <div className="flex justify-center">
                 <p>No data found</p>
@@ -147,8 +181,8 @@ const SubPageComponent = ({ category, links, subMenu, title, limit, showPaginati
             )}
           </div>
 
-          {
-            showPagination && <div className="flex justify-center mt-12">
+          {showPagination && (
+            <div className="flex justify-center mt-12">
               <Pagination
                 color="primary"
                 count={data?.totalPages || 0}
@@ -156,15 +190,12 @@ const SubPageComponent = ({ category, links, subMenu, title, limit, showPaginati
                 onChange={handlePageChange}
               />
             </div>
-          }
-
+          )}
         </div>
-
       </div>
     </div>
   );
-}
-
+};
 
 const Card = ({ data }: { data: any }) => {
   function extractFirstText(html: string, charLimit: number): string {
@@ -191,18 +222,26 @@ const Card = ({ data }: { data: any }) => {
     return fullText.slice(0, charLimit).trim();
   }
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const firstText = extractFirstText(data?.content, 100);
 
   return (
     <div className="bg-[#F5F6F9] grid grid-cols-6 md:gap-7 gap-3">
       <div className="md:col-span-2 col-span-3 relative">
         <Link href={"/" + data?.slug} className="w-full h-[200px] ">
-          <img
+          {isLoading && (
+            <div className="absolute inset-0 bg-gray-300 animate-pulse"></div>
+          )}
+          <Image
             width={300}
             height={200}
-            className={`w-full h-full max-h-[200px] ${data.thumbnail ? 'object-cover' : 'object-contain p-2'}`}
+            className={`w-full h-full max-h-[200px] ${
+              data.thumbnail ? "object-cover" : "object-contain p-2"
+            }`}
             src={getImageUrl(data?.thumbnail)}
-            alt="blog-image"
+            alt={data.title}
+            onLoadingComplete={() => setIsLoading(false)}
           />
         </Link>
       </div>

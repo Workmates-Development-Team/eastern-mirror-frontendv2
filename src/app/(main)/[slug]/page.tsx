@@ -1,4 +1,5 @@
 import BreadcrumbComponent from "@/components/BreadcrumbConponent";
+import NotFoundComponent from "@/components/not-found";
 import ShareComponent from "@/components/ShareComponent";
 import axiosServer from "@/utils/axiosServer";
 import { formatDate } from "@/utils/date";
@@ -68,7 +69,7 @@ export async function generateMetadata({
 const ContentPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const data = await fetchData((await params).slug);
 
-  if (!data) return <div>No data found</div>;
+  if (!data) return <NotFoundComponent />;
 
   return (
     <div className="min-h-screen">

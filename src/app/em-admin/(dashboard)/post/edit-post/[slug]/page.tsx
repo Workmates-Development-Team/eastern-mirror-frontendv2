@@ -311,7 +311,7 @@ const EditPost = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2  col-span-2">
+        <div className="flex flex-col gap-2  col-span-2 mt-6">
           <Label htmlFor="name">Meta Keyword</Label>
           <Autocomplete
             multiple
@@ -345,7 +345,7 @@ const EditPost = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2  col-span-2">
+        <div className="flex flex-col gap-2  col-span-2 mt-6">
           <Label htmlFor="name">Meta description</Label>
 
           <TextField
@@ -357,7 +357,8 @@ const EditPost = () => {
           />
         </div>
 
-      <div className="border border-gray-300 rounded-md p-4 mb-6">
+
+      <div className="border border-gray-300 rounded-md p-4 mb-6 mt-6">
         <TextEditor value={value} setValue={setValue} setPlainText={setPlainText} plainText={plainText} />
       </div>
 

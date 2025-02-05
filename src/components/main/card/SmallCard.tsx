@@ -1,11 +1,15 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/utils/date";
 import { getImageUrl } from "@/utils/getImageUrl";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 const SmallCard = ({ data, isBorder }: PropsType) => {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <div
       className={cn(
@@ -31,13 +35,17 @@ const SmallCard = ({ data, isBorder }: PropsType) => {
       </div>
 
       <div className="col-span-2">
-        <Link href={"/" + data?.slug}>
-          <img
+        <Link href={"/" + data?.slug} className="h-[117px] relative">
+          {isLoading && (
+            <div className="absolute inset-0 bg-gray-300 animate-pulse rounded-lg"></div>
+          )}
+          <Image
             width={199}
             height={117}
-            className="w-full h-[94%] max-h-[117px] rounded-xl object-cover"
+            className="w-full h-[117px] rounded-xl object-cover"
             src={getImageUrl(data?.thumbnail)}
-            alt="blog-image"
+            alt={data.title}
+            onLoadingComplete={() => setIsLoading(false)}
           />
         </Link>
       </div>

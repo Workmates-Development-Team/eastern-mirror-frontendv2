@@ -18,6 +18,7 @@ const Event = ({
     author: string;
     date: string;
     slug: string;
+    _id: string
   }[];
 }) => {
   if (!title) return null;
@@ -39,7 +40,7 @@ const Event = ({
         </div>
         <div className="grid md:grid-cols-3 grid-cols-1 md:gap-7 gap-5">
           {articles?.slice(0, 2).map((item, i) => (
-            <div key={i}>
+            <div key={item._id}>
               <CardVertical data={item} />
             </div>
           ))}
@@ -51,17 +52,18 @@ const Event = ({
                   thumbnail: string;
                   title: string;
                   slug: string;
+                  _id: string;
                 },
                 i
               ) => (
                 <Link
                   href={`/${item?.slug}`}
-                  key={i}
+                  key={item._id}
                   className="flex md:gap-4 gap-2.5"
                 >
                   <div className="">
                     <div className="md:w-[120px] w-[110px]">
-                      <img
+                      <Image
                         className="w-full md:h-[117px] h-[100px] object-cover"
                         src={getImageUrl(item.thumbnail)}
                         width={120}
@@ -99,7 +101,7 @@ export const CardVertical = ({
 }) => (
   <Link href={`/${data?.slug}`}>
     <div>
-      <img
+      <Image
         src={getImageUrl(data.thumbnail)}
         alt={data.title}
         className="w-full md:h-[250px] h-[225px] object-cover"

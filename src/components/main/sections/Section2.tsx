@@ -23,7 +23,7 @@ const Section2 = ({ data, heading, link }: PropsType) => {
               {data.slice(1, 4).map((item: any, i: number) => (
                 <SmallCard
                   data={item}
-                  key={i}
+                  key={item._id}
                   isBorder={i !== data.slice(1, 4).length - 1}
                 />
               ))}

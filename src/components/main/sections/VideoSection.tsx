@@ -15,7 +15,7 @@ const VideoSection = ({ data, heading }: PropsType) => {
       <div className="container py-2 px-4 md:px-6 ">
         <div className="grid md:grid-cols-4 grid-cols-1 gap-7">
           {data.map((item: any, i: number) => (
-            <a href={item.link} target="_blank" key={i} className="relative">
+            <a href={item.link} target="_blank" key={item._id} className="relative">
               <div className="absolute top-0 left-0 right-0 bottom-0 bg-black opacity-25"></div>
               <Image
                 className="w-full h-[201.61px] object-cover"

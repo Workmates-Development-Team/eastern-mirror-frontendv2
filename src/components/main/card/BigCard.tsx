@@ -1,11 +1,15 @@
+"use client";
+
 import { IoShareSocial } from "react-icons/io5";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { formatDate } from "@/utils/date";
 
 const BigCard = ({ data }: { data: PropsType }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
   const handleShare = async () => {
     const shareUrl = `${window.location.origin}/${data?.slug}`;
     const shareData = {
@@ -38,13 +42,21 @@ const BigCard = ({ data }: { data: PropsType }) => {
           <IoShareSocial className="w-[22.63px] h-[22.63px] text-white" />
         </div>
 
-        <Link href={"/" + data?.slug}>
-          <img
+        <Link
+          href={"/" + data?.slug}
+          className="w-full md:h-[440px] h-[220px]  relative"
+        >
+          {isLoading && (
+            <div className="absolute inset-0 bg-gray-300 animate-pulse rounded-lg"></div>
+          )}
+
+          <Image
             className="w-full md:h-[440px] h-[220px]  object-cover"
             width={500}
             height={440}
             src={getImageUrl(data?.thumbnail)}
-            alt="blog-image"
+            alt={data.title}
+            onLoadingComplete={() => setIsLoading(false)}
           />
         </Link>
         <div className="-mt-12 relative w-[95%] mx-auto">
