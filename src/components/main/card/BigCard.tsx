@@ -37,7 +37,7 @@ const BigCard = ({ data }: { data: PropsType }) => {
       <div className="relative">
         <div
           onClick={handleShare}
-          className="bg-black bg-opacity-10 cursor-pointer absolute backdrop-blur-sm w-[30.71px] h-[30.71px] flex items-center justify-center rounded-sm top-3 right-5"
+          className="bg-black bg-opacity-10 cursor-pointer absolute z-10 backdrop-blur-sm w-[30.71px] h-[30.71px] flex items-center justify-center rounded-sm top-3 right-5"
         >
           <IoShareSocial className="w-[22.63px] h-[22.63px] text-white" />
         </div>
