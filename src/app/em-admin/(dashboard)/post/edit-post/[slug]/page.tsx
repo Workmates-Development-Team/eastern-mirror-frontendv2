@@ -52,6 +52,7 @@ const EditPost = () => {
   const [id, setId] = useState<string>("");
   const router = useRouter();
   const { slug } = useParams();
+  const [plainText, setPlainText] = useState("");
 
   const fetchData = async (slug: string) => {
     const { data } = await axiosServer.get("/article/by/" + slug);
@@ -117,6 +118,7 @@ const EditPost = () => {
       const formData = new FormData();
       formData.append("title", title);
       formData.append("content", value);
+      formData.append("plainTextContent", plainText);
       formData.append(
         "category",
         JSON.stringify(category?.map((item) => item?._id))
@@ -304,7 +306,7 @@ const EditPost = () => {
         </div>
 
       <div className="border border-gray-300 rounded-md p-4 mb-6">
-        <TextEditor value={value} setValue={setValue} />
+        <TextEditor value={value} setValue={setValue} setPlainText={setPlainText} plainText={plainText} />
       </div>
 
       <Box sx={{ display: "flex", justifyContent: "end" }}>

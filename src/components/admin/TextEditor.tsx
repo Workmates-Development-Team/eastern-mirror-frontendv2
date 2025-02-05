@@ -3,17 +3,15 @@ import React, { useMemo, useRef, useState } from "react";
 
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
-const TextEditor = ({ value, setValue }: { value: any; setValue: any }) => {
+const TextEditor = ({ value, setValue, setPlainText, plainText }: { value: any; setValue: any, plainText: any, setPlainText: any }) => {
   const editor = useRef(null);
-  const [plainText, setPlainText] = useState("");
+  
   const getPlainText = (html: string) => {
     const tempElement = document.createElement("div");
     tempElement.innerHTML = html;
     return tempElement.textContent || tempElement.innerText || "";
   };
 
-  // console.log(plainText);
-  // console.log(value)
 
   const config = useMemo(
     () => ({
@@ -176,18 +174,18 @@ const TextEditor = ({ value, setValue }: { value: any; setValue: any }) => {
         ref={editor}
         value={value}
         config={config}
-        onBlur={(newContent) => setValue(newContent)}
-        onChange={(newContent) => setValue(newContent)}
-        // onBlur={(newContent) => {
-        //   const plainText = getPlainText(newContent);
-        //   setPlainText(plainText); // Do something with the plain text
-        //   setValue(newContent);
-        // }}
-        // onChange={(newContent) => {
-        //   const plainText = getPlainText(newContent);
-        //   setPlainText(plainText);
-        //   setValue(newContent);
-        // }}
+        // onBlur={(newContent) => setValue(newContent)}
+        // onChange={(newContent) => setValue(newContent)}
+        onBlur={(newContent) => {
+          const plainText = getPlainText(newContent);
+          setPlainText(plainText); // Do something with the plain text
+          setValue(newContent);
+        }}
+        onChange={(newContent) => {
+          const plainText = getPlainText(newContent);
+          setPlainText(plainText);
+          setValue(newContent);
+        }}
       />
     </div>
   );

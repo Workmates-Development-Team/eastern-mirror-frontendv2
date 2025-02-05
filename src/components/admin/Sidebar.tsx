@@ -27,7 +27,6 @@ const AdminSidebar = () => {
     });
   };
 
-  console.log(user)
 
   const toggleMenu = (menu: any) => {
     setOpenMenu((prevMenu) => (prevMenu === menu ? null : menu));

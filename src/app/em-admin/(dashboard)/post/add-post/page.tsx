@@ -21,14 +21,11 @@ import { Box } from "@mui/material";
 import axiosInstance from "@/utils/axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Switch } from "@/components/ui/switch";
 import { useQuery } from "@tanstack/react-query";
 import "./style.css";
 import TextEditor from "@/components/admin/TextEditor";
 import Gallery from "@/components/admin/Gallery";
 import { getImageUrl } from "@/utils/getImageUrl";
-import DatePicker from "react-datepicker";
-
 // Dynamically import ReactQuill with no SSR
 // const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -61,6 +58,7 @@ const AddPost = () => {
   const [selectedAuthor, setSelectedAuthor] = useState<string>("");
   const [publishedAt, setpublishedAt] = useState<string>(new Date().toISOString());
   const router = useRouter();
+  const [plainText, setPlainText] = useState("");
 
   useEffect(() => {
     sessionStorage.setItem("postTitle", title);
@@ -121,6 +119,7 @@ const AddPost = () => {
 
       formData.append("thumbnail", thumbnail);
       formData.append("publishedAt", publishedAt);
+      formData.append("plainTextContent", plainText);
 
       const { data } = await axiosInstance.post("/article/add", formData, {
         headers: {
@@ -338,7 +337,7 @@ const AddPost = () => {
         </div>
       </div>
 
-      <TextEditor value={value} setValue={setValue} />
+      <TextEditor value={value} setValue={setValue} plainText={plainText} setPlainText={setPlainText} />
 
       <div className="flex gap-4 mt-4">
         <Button
