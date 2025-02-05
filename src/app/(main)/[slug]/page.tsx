@@ -2,6 +2,7 @@ import BreadcrumbComponent from "@/components/BreadcrumbConponent";
 import ShareComponent from "@/components/ShareComponent";
 import axiosServer from "@/utils/axiosServer";
 import { formatDate } from "@/utils/date";
+import { getImageUrl } from "@/utils/getImageUrl";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -36,8 +37,9 @@ export async function generateMetadata({
     title: article.title,
     description: article.excerpt || article.plainTextContent,
     keywords: article.metaKeyWord?.join(", ") || article.tags?.join(","),
+    metadataBase: new URL(canonicalUrl),
     alternates: {
-      canonical: canonicalUrl, // ✅ Add canonical link here
+      canonical: canonicalUrl,
     },
 
     openGraph: {
@@ -47,7 +49,7 @@ export async function generateMetadata({
       type: "article",
       images: [
         {
-          url: article.thumbnail || "/images/logo-light.png",
+          url: getImageUrl(article.thumbnail) || "/images/logo-light.png",
           width: 1200,
           height: 630,
           alt: article.title || "Default Image",
@@ -58,7 +60,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: article.title,
       description: article.excerpt || article.plainTextContent,
-      images: [article.thumbnail || "/default-image.jpg"],
+      images: [getImageUrl(article.thumbnail) || "/default-image.jpg"],
     },
   };
 }
