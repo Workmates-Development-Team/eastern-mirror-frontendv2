@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, DragEvent, ChangeEvent, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import "react-quill/dist/quill.snow.css";
@@ -42,7 +42,6 @@ type TagProps = {
 const EditPost = () => {
   const [value, setValue] = useState<string>("");
   const [title, setTitle] = useState("");
-  const [file, setFile] = useState<File | null>(null);
   const [category, setCategory] = useState<CategoryOption[]>([]);
   const [authors, setAuthors] = useState<AuthorProps[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -79,6 +78,7 @@ const EditPost = () => {
     setCategory(data?.category || []);
     setThumbnail(data?.thumbnail || "");
     setpublishedAt(data?.publishedAt || "");
+    setPlainText(data?.plainTextContent || "");
     setId(data?._id);
   }, [data]);
 
@@ -108,17 +108,10 @@ const EditPost = () => {
     getAuthors();
   }, []);
 
-  const slugify = (str: string) =>
-    str
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/[\s_-]+/g, "-")
-      .replace(/^-+|-+$/g, "");
+
 
   const handleSubmit = async () => {
     try {
-      const slug = slugify(title);
       const formData = new FormData();
       formData.append("title", title);
       formData.append("content", value);
@@ -128,8 +121,10 @@ const EditPost = () => {
         JSON.stringify(category?.map((item) => item?._id))
       );
       formData.append("author", selectedAuthor);
+      if (slug && typeof slug === "string") {
+        formData.append("slug", slug);
+      }
       formData.append("tags", JSON.stringify(selectedTags));
-      formData.append("slug", slug);
       formData.append("thumbnail", thumbnail);
       formData.append("publishedAt", publishedAt);
       formData.append("excerpt", excerpt);
