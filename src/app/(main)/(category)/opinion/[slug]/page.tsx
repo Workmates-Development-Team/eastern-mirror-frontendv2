@@ -23,11 +23,11 @@ const OpinionSubCategory = async ({
             </Head>
 
             <SubPage title={
-                slug === 'letters-to-editor' ? 'Letters to Editor' : slug === 'views-and-reviews' ? 'Views and Reviews' : slug === 'op-ed' ? 'Op-Ed' : slug === 'book-reviews' ? 'Book Reviews' : slug} category={slug} links={[{
+                slug === 'letters-to-editor' ? 'Letters to Editor' : slug === 'views-and-reviews' ? 'Views and Reviews' : slug === 'op-ed' ? 'Op-Ed' : slug === 'book-reviews' ? 'Book Reviews' : slug === 'editorial'? 'Editorial': slug} category={slug} links={[{
                     label: "Opinion",
                     href: '/opinion'
                 }, {
-                    label: slug === 'letters-to-editor' ? 'Letters to Editor' : slug === 'views-and-reviews' ? 'Views and Reviews' : slug === 'op-ed' ? 'Op-Ed' : slug === 'book-reviews' ? 'Book Reviews' : slug
+                    label: slug === 'letters-to-editor' ? 'Letters to Editor' : slug === 'views-and-reviews' ? 'Views and Reviews' : slug === 'op-ed' ? 'Op-Ed' : slug === 'book-reviews' ? 'Book Reviews': slug === 'editorial'? 'Editorial' : slug
                 }]} />
         </div>
     )

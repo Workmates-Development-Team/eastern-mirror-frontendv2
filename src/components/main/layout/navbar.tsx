@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, Search } from "lucide-react";
+import { ChevronDown, Menu, Search } from "lucide-react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -15,6 +15,16 @@ import { useRouter } from "next/navigation";
 export default function Navbar() {
   const [search, setSearch] = useState("");
   const router = useRouter();
+  const [openMenu, setOpenMenu] = useState<number | null>(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  const toggleMenu = (index: number) => {
+    setOpenMenu(openMenu === index ? null : index);
+  };
+
+  const handleLinkClick = () => {
+    setIsSheetOpen(false);
+  };
 
   return (
     <>
@@ -44,7 +54,7 @@ export default function Navbar() {
             ADVERTISEMENT
           </Link> */}
         </nav>
-        <Sheet>
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button
               variant="outline"
@@ -55,19 +65,54 @@ export default function Navbar() {
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left">
+          <SheetContent side="left" className="overflow-auto">
             <nav className="grid gap-6 text-lg font-regular">
-              {NAVBAR_LINKS.map((link, i) => (
-                <Link
-                  href={link.href}
-                  className="text-muted-foreground hover:text-foreground capitalize"
-                  key={i}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {NAVBAR_LINKS.map((link, i) =>
+                link?.subLinks?.length ? (
+                  <div key={i}>
+                    <div
+                      className="flex justify-between items-center cursor-pointer"
+                      onClick={() => toggleMenu(i)}
+                    >
+                      <span className="text-muted-foreground hover:text-foreground capitalize">
+                        {link.label}
+                      </span>
+                      <ChevronDown
+                        className={`transition-transform ${
+                          openMenu === i ? "rotate-180" : ""
+                        }`}
+                      />
+                    </div>
 
-              <Link
+                    {openMenu === i && (
+                      <div className="flex flex-col bg-secondary mt-4 p-4 rounded-lg gap-4">
+                        {link?.subLinks?.map((item, j) => (
+                          <Link
+                            key={j}
+                            href={link.href === "/education" ? item.href : link.href + item.href}
+                            className="text-muted-foreground hover:text-foreground capitalize"
+                            onClick={handleLinkClick}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+
+                  </div>
+                ) : (
+                  <Link
+                    href={link.href}
+                    className="text-muted-foreground hover:text-foreground capitalize"
+                    key={i}
+                    onClick={handleLinkClick}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
+
+              {/* <Link
                 href="/advertisment"
                 className={cn(
                   buttonVariants({ size: "sm" }),
@@ -75,7 +120,7 @@ export default function Navbar() {
                 )}
               >
                 ADVERTISEMENT
-              </Link>
+              </Link> */}
             </nav>
           </SheetContent>
         </Sheet>
