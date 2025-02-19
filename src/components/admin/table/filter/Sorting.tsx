@@ -36,10 +36,10 @@ export default function Sorting({ setOrder, setSort }: SortingProps) {
 
   React.useEffect(() => {
     if (value === "newest") {
-      setSort("createdAt");
+      setSort("publishedAt");
       setOrder("desc");
     } else if (value === "oldest") {
-      setSort("createdAt");
+      setSort("publishedAt");
       setOrder("asc");
     } else if (value === "az") {
       setSort("title");

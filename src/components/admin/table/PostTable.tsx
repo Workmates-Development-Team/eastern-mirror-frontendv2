@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreHorizontal } from "lucide-react";
+import { Loader2, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -34,6 +34,8 @@ import Sorting from "./filter/Sorting";
 import toast from "react-hot-toast";
 import { useRecoilValue } from "recoil";
 import { useAuthContext } from "@/context/AuthContext";
+import { Skeleton } from "@/components/ui/skeleton";
+import TableSkeleton from "./TableSkeleton";
 
 export type Article = {
   _id: string;
@@ -60,7 +62,7 @@ interface FetchArticlesResponse {
 }
 
 export default function CategoryTable() {
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
   const [search, setSearch] = useState<string>("");
   const [debouncedSearch] = useDebounce(search, 500);
   const [page, setPage] = useState<number>(1);
@@ -192,6 +194,7 @@ export default function CategoryTable() {
             )}
           </div>
         </div>
+
         <div className="rounded-md border">
           <Table>
             <TableHeader>
@@ -204,80 +207,91 @@ export default function CategoryTable() {
                 <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              {data?.articles.length ? (
-                data.articles.map((row) => (
-                  <TableRow key={row._id}>
-                    <TableCell>
-                      <div>{row?.title}</div>
-                    </TableCell>
 
-                    <TableCell>
-                      <div>{formatDate(row?.publishedAt)}</div>
-                    </TableCell>
-                    <TableCell>
-                      <div>{row?.tags?.join(", ")}</div>
-                    </TableCell>
-                    <TableCell>
-                      <div>
-                        {row?.category?.map((item) => item?.name).join(", ")}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={row?.isPublished ? "default" : "destructive"}
-                      >
-                        {row?.isPublished ? "Yes" : "No"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            {isLoading ? (
+              <TableBody>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <TableSkeleton key={i} />
+                ))}
+              </TableBody>
+            ) : (
+              <TableBody>
+                {data?.articles.length ? (
+                  data.articles.map((row) => (
+                    <TableRow key={row._id}>
+                      <TableCell>
+                        <div>{row?.title}</div>
+                      </TableCell>
 
-                          <DropdownMenuItem>
-                            <div onClick={() => copyToClipboard(row._id)}>
-                              Copy Post ID
-                            </div>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Link href={`/em-admin/post/edit-post/${row.slug}`}>
-                              Edit Article
-                            </Link>
-                          </DropdownMenuItem>
-                          {user?.userType === "admin" ||
-                          user?.userType === "editor" ? (
-                            <>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem>
-                                <button
-                                  disabled={loading}
-                                  onClick={() => handleDelete(row._id)}
-                                >
-                                  {loading ? "Deleting..." : "Delete Article"}
-                                </button>
-                              </DropdownMenuItem>
-                            </>
-                          ) : null}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <TableCell>
+                        <div>{formatDate(row?.publishedAt)}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div>{row?.tags?.join(", ")}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div>
+                          {row?.category?.map((item) => item?.name).join(", ")}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={row?.isPublished ? "default" : "destructive"}
+                        >
+                          {row?.isPublished ? "Yes" : "No"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                              <span className="sr-only">Open menu</span>
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+
+                            <DropdownMenuItem>
+                              <div onClick={() => copyToClipboard(row._id)}>
+                                Copy Post ID
+                              </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Link
+                                href={`/em-admin/post/edit-post/${row.slug}`}
+                              >
+                                Edit Article
+                              </Link>
+                            </DropdownMenuItem>
+                            {user?.userType === "admin" ||
+                            user?.userType === "editor" ? (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>
+                                  <button
+                                    disabled={loading}
+                                    onClick={() => handleDelete(row._id)}
+                                  >
+                                    {loading ? "Deleting..." : "Delete Article"}
+                                  </button>
+                                </DropdownMenuItem>
+                              </>
+                            ) : null}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} className="h-24 text-center">
+                      No results.
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={7} className="h-24 text-center">
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
+                )}
+              </TableBody>
+            )}
           </Table>
         </div>
 
