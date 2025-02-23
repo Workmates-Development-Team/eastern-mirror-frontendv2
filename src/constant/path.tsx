@@ -107,6 +107,10 @@ export const NAVBAR_LINKS = [
         href: "/longleng",
       },
       {
+        label: "Meluri",
+        href: "/meluri",
+      },
+      {
         label: "Mokokchung",
         href: "/mokokchung",
       },
