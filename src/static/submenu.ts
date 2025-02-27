@@ -4,8 +4,8 @@ export const opinion = [
     href: "/opinion/editorial",
   },
   {
-    name: "Letters to Editor",
-    href: "/opinion/letters-to-editor",
+    name: "Letter to Editor",
+    href: "/opinion/letter-to-editor",
   },
   {
     name: "Op-Ed",

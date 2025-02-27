@@ -32,8 +32,8 @@ const OpinionSubCategory = async ({
 
       <SubPage
         title={
-          slug === "letters-to-editor"
-            ? "Letters to Editor"
+          slug === "letter-to-editor"
+            ? "Letter to Editor"
             : slug === "views-and-reviews"
             ? "Views and Reviews"
             : slug === "op-ed"
@@ -52,8 +52,8 @@ const OpinionSubCategory = async ({
           },
           {
             label:
-              slug === "letters-to-editor"
-                ? "Letters to Editor"
+              slug === "letter-to-editor"
+                ? "Letter to Editor"
                 : slug === "views-and-reviews"
                 ? "Views and Reviews"
                 : slug === "op-ed"

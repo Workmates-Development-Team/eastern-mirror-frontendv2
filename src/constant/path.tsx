@@ -184,7 +184,7 @@ export const NAVBAR_LINKS = [
       },
       {
         label: "Letter to Editor",
-        href: "/letters-to-editor",
+        href: "/letter-to-editor",
       },
       {
         label: "Book Reviews",
