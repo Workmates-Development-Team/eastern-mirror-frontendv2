@@ -235,7 +235,7 @@ export const FOOTER_LINKS = [
     links: [
       {
         label: "EM Exclusive",
-        href: "/em-exclusive",
+        href: "/exclusive",
       },
       {
         label: "Education",
@@ -263,14 +263,7 @@ export const FOOTER_LINKS = [
         label: "India",
         href: "/india",
       },
-      {
-        label: "Northeast India",
-        href: "/northeast-india",
-      },
-      {
-        label: "News in Brief",
-        href: "/news-in-brief",
-      },
+  
     ],
   },
   {
@@ -278,39 +271,39 @@ export const FOOTER_LINKS = [
     links: [
       {
         label: "Editorial",
-        href: "/editorial",
+        href: "/opinion/editorial",
       },
       {
         label: "Views & Reviews",
-        href: "/views-reviews",
+        href: "/opinion/views-and-reviews",
       },
       {
         label: "Op-Ed",
-        href: "/op-ed",
+        href: "/opinion/op-ed",
       },
       {
         label: "Book Reviews",
-        href: "/book-reviews",
+        href: "/opinion/book-reviews",
       },
     ],
   },
-  {
-    section: "Entertainment",
-    links: [
-      {
-        label: "Rhythm of Love",
-        href: "/rhythm-of-love",
-      },
-      {
-        label: "Music",
-        href: "/music",
-      },
-      {
-        label: "Film",
-        href: "/film",
-      },
-    ],
-  },
+  // {
+  //   section: "Entertainment",
+  //   links: [
+  //     {
+  //       label: "Rhythm of Love",
+  //       href: "/rhythm-of-love",
+  //     },
+  //     {
+  //       label: "Music",
+  //       href: "/music",
+  //     },
+  //     {
+  //       label: "Film",
+  //       href: "/film",
+  //     },
+  //   ],
+  // },
   {
     section: "Others",
     links: [

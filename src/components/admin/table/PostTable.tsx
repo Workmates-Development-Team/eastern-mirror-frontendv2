@@ -115,7 +115,7 @@ export default function CategoryTable() {
     ],
     queryFn: () =>
       fetchArticles({ page, limit, sort, order, search: debouncedSearch }),
-    staleTime: 300000,
+    // staleTime: 300000,
   });
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {

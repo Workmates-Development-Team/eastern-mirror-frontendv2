@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import Script from "next/script";
 import NextTopLoader from 'nextjs-toploader';
+import ScrollToTop from "@/components/ScrollToTop";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -59,6 +60,7 @@ export default function RootLayout({
         )}
       >
         <NextTopLoader />
+        <ScrollToTop /> 
         {children}
       </body>
     </html>

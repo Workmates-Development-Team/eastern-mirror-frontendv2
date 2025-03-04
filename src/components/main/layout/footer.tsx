@@ -8,69 +8,73 @@ import React from "react";
 const nagaland = [
   {
     label: "Chümoukedima",
-    href: "/chumoukedima",
+    href: "/nagaland/chumoukedima",
   },
   {
     label: "Dimapur",
-    href: "/dimapur",
+    href: "/nagaland/dimapur",
   },
   {
     label: "Kiphire",
-    href: "/kiphire",
+    href: "/nagaland/kiphire",
   },
   {
     label: "Kohima",
-    href: "/kohima",
+    href: "/nagaland/kohima",
   },
   {
     label: "Longleng",
-    href: "/longleng",
+    href: "/nagaland/longleng",
+  },
+  {
+    label: "Meluri",
+    href: "/nagaland/meluri",
   },
   {
     label: "Mokokchung",
-    href: "/mokokchung",
+    href: "/nagaland/mokokchung",
   },
   {
     label: "Mon",
-    href: "/mon",
+    href: "/nagaland/mon",
   },
   {
     label: "Niuland",
-    href: "/niuland",
+    href: "/nagaland/niuland",
   },
   {
     label: "Noklak",
-    href: "/noklak",
+    href: "/nagaland/noklak",
   },
   {
     label: "Peren",
-    href: "/peren",
+    href: "/nagaland/peren",
   },
   {
     label: "Phek",
-    href: "/phek",
+    href: "/nagaland/phek",
   },
   {
     label: "Shamator",
-    href: "/shamator",
+    href: "/nagaland/shamator",
   },
   {
     label: "Tseminyü",
-    href: "/tseminyu",
+    href: "/nagaland/tseminyu",
   },
   {
     label: "Tuensang",
-    href: "/tuensang",
+    href: "/nagaland/tuensang",
   },
   {
     label: "Wokha",
-    href: "/wokha",
+    href: "/nagaland/wokha",
   },
   {
     label: "Zünheboto",
-    href: "/zunheboto",
+    href: "/nagaland/zunheboto",
   },
-];
+]
 
 const Footer = () => {
   return (
@@ -97,17 +101,17 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div>
+        <Link href='/'>
           <Image
             src="/images/logo-light.png"
             alt="logo-light"
             width={300}
             height={120}
           />
-        </div>
+        </Link>
       </div>
 
-      <div className="md:mt-12 mt-8 grid md:grid-cols-6 grid-cols-1 gap-8 md:gap-0 md:gap-y-8 text-center md:text-start">
+      <div className="md:mt-12 mt-8 grid md:grid-cols-5 grid-cols-1 gap-8 md:gap-0 md:gap-y-8 text-center md:text-start">
         {FOOTER_LINKS?.map((item, i) => (
           <div
             key={i}
@@ -162,7 +166,9 @@ const Footer = () => {
         </ul>
 
         <nav className="flex-wrap flex md:flex-nowrap justify-center md:gap-10 gap-4 mt-8">
-          {NAVBAR_LINKS.map((link, i) => (
+          {NAVBAR_LINKS.map((link, i) => {
+            if(link.label === "More") return (null)
+            return (
             <Link
               key={i}
               href={link.href}
@@ -170,7 +176,7 @@ const Footer = () => {
             >
               {link.label}
             </Link>
-          ))}
+          )})}
         </nav>
       </div>
     </div>
