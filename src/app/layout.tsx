@@ -5,7 +5,7 @@ import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import Script from "next/script";
-import NextTopLoader from 'nextjs-toploader';
+import NextTopLoader from "nextjs-toploader";
 import ScrollToTop from "@/components/ScrollToTop";
 
 const fontSans = FontSans({
@@ -14,9 +14,20 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "Eastern Mirror",
+  title:
+    "Eastern Mirror: Latest News, Top Headlines, Breaking News, Live Updates from Nagaland & Beyond",
   description:
-    "Eastern Mirror brings you the latest breaking news and current affairs. The top stories on politics, business, sports, technology, education, arts and",
+    "Stay informed with breaking news, top headlines, and live updates on politics, sports, business, tech, and more from Nagaland, India & world.",
+
+  keywords: [
+    "Nagaland news",
+    "India news",
+    "world news",
+    "breaking news",
+    "political updates",
+    "sports headlines",
+    "tech news",
+  ],
 };
 
 export default function RootLayout({
@@ -51,7 +62,6 @@ export default function RootLayout({
             `,
           }}
         ></Script>
-
       </head>
       <body
         className={cn(
@@ -60,7 +70,7 @@ export default function RootLayout({
         )}
       >
         <NextTopLoader />
-        <ScrollToTop /> 
+        <ScrollToTop />
         {children}
       </body>
     </html>
