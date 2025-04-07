@@ -225,6 +225,10 @@ export const NAVBAR_LINKS = [
         label: "Health",
         href: "/health",
       },
+      {
+        label: "Region",
+        href: "/region",
+      },
     ],
   },
 ];
