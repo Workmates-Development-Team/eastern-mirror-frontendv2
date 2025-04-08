@@ -19,6 +19,7 @@ const ROUTES = [
   { label: "Editor's Pick", href: "/editors-pick" },
   { label: "About Us", href: "/about-us" },
   { label: "Contact Us", href: "/contact-us" },
+  { label: "Region", href: "/region" },
 ];
 
 const SUB_ROUTES = [
