@@ -1,10 +1,8 @@
-import { fetchBlogSlugs } from "@/lib/api";
-import { MetadataRoute } from "next";
+import { NextResponse } from "next/server";
 
-const baseUrl = "https://www.easternmirrornagaland.com";
+const BASE_URL = "https://www.easternmirrornagaland.com";
 
 const ROUTES = [
-  { label: "Home", href: "/" },
   { label: "Nagaland", href: "/nagaland" },
   { label: "India", href: "/india" },
   { label: "World", href: "/world" },
@@ -17,8 +15,6 @@ const ROUTES = [
   { label: "Health", href: "/health" },
   { label: "EM Exclusive", href: "/exclusive" },
   { label: "Editor's Pick", href: "/editors-pick" },
-  { label: "About Us", href: "/about-us" },
-  { label: "Contact Us", href: "/contact-us" },
   { label: "Region", href: "/region" },
 ];
 
@@ -57,28 +53,37 @@ const SUB_ROUTES = [
   },
 ];
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes = ROUTES.map(({ href }) => ({
-    url: `${baseUrl}${href}`,
-    lastModified: new Date().toISOString(),
-    priority: 1.0,
-  }));
+export async function GET() {
+  const topLevelRoutes = ROUTES.map((route) => {
+    return `
+  <url>
+    <loc>${BASE_URL}${route.href}</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+  });
 
-  const dynamicRoutes = SUB_ROUTES.flatMap(({ parent, subLinks }) =>
-    subLinks.map((sub) => ({
-      url: `${baseUrl}${parent}/${sub}`,
-      lastModified: new Date().toISOString(),
-      priority: 1.0,
-    }))
+  const subCategoryRoutes = SUB_ROUTES.flatMap((group) =>
+    group.subLinks.map((sub) => {
+      return `
+  <url>
+    <loc>${BASE_URL}${group.parent}/${sub}</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>`;
+    })
   );
 
-  // Fetch dynamic blog slugs
-  const blogSlugs = await fetchBlogSlugs();
-  const blogRoutes = blogSlugs.map((item: any) => ({
-    url: `${baseUrl}/${item.slug}`,
-    lastModified: new Date().toISOString(),
-    priority: 0.80,
-  }));
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
+${[...topLevelRoutes, ...subCategoryRoutes].join("")}
+</urlset>`;
 
-  return [...staticRoutes, ...dynamicRoutes, ...blogRoutes];
+  return new NextResponse(xml, {
+    headers: {
+      "Content-Type": "application/xml",
+    },
+  });
 }
