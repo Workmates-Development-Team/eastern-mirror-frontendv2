@@ -8,7 +8,6 @@ const IndiaPage = async () => {
     return (
         <div>
          
-
             <SubPage title="Editor's Pick" category="editor's-pick" links={[{
                 label: "Editor's Pick",
             }]} />

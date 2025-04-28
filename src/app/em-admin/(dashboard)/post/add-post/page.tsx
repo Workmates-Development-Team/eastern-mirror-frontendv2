@@ -116,14 +116,24 @@ const AddPost = () => {
         JSON.stringify(category?.map((item) => item?._id))
       );
       formData.append("author", selectedAuthor);
-      formData.append("tags", JSON.stringify(selectedTags));
+      formData.append(
+        "tags",
+        JSON.stringify(
+          selectedTags.map((tag) => tag.replace(/\s+/g, " ").trim())
+        )
+      );
       formData.append("slug", slug);
 
       formData.append("thumbnail", thumbnail);
       formData.append("publishedAt", publishedAt);
       formData.append("plainTextContent", plainText);
       formData.append("excerpt", excerpt);
-      formData.append("metaKeyWord", JSON.stringify(metaKeyWord));
+      formData.append(
+        "metaKeyWord",
+        JSON.stringify(
+          metaKeyWord.map((metaKey) => metaKey.replace(/\s+/g, " ").trim())
+        )
+      );
 
       const { data } = await axiosInstance.post("/article/add", formData, {
         headers: {

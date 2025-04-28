@@ -32,7 +32,9 @@ export async function generateMetadata({
     };
   }
 
-  const canonicalUrl = `https://www.easternmirrornagaland.com/${(await params).slug}`;
+  const canonicalUrl = `https://www.easternmirrornagaland.com/${
+    (await params).slug
+  }`;
 
   return {
     title: article.title,
@@ -66,8 +68,14 @@ export async function generateMetadata({
   };
 }
 
-const ContentPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+const ContentPage = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
   const data = await fetchData((await params).slug);
+
+  console.log(data)
 
   if (!data) return <NotFoundComponent />;
 
@@ -75,10 +83,7 @@ const ContentPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
     <div className="min-h-screen">
       <div className="container py-2 px-4 md:px-6 mt-3">
         <BreadcrumbComponent
-          links={[
-            { label: "Home", href: "/" },
-            { label: data.title },
-          ]}
+          links={[{ label: "Home", href: "/" }, { label: data.title }]}
         />
 
         <div className="grid grid-cols-3 gap-7 md:mt-20 mt-10">
@@ -113,14 +118,17 @@ const ContentPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
                 ></div>
               </div>
 
-              <div className="flex gap-3 flex-wrap">
+              <div className="flex gap-3 flex-wrap mt-4">
                 {data.tags?.map((item: string, i: number) => (
                   <Link
                     className="border text-[#909090] text-xs px-3 py-2"
-                    href={`/tag/${item.toLocaleLowerCase().split(" ").join("-")}`}
+                    href={`/tag/${item
+                      .toLocaleLowerCase()
+                      .split(" ")
+                      .join("-")}`}
                     key={i}
                   >
-                    {item}
+                    {item.trim()}
                   </Link>
                 ))}
               </div>
