@@ -39,6 +39,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="google-adsense-account" content="ca-pub-6451251690288368" />
+        <Script
+          src="https://platform.twitter.com/widgets.js"
+          strategy="afterInteractive"
+        />
         {/* Add Google AdSense */}
         <Script
           async

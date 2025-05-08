@@ -6,6 +6,7 @@ import { formatDate } from "@/utils/date";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { Metadata } from "next";
 import Link from "next/link";
+import parse from "html-react-parser";
 
 const fetchData = async (slug: string) => {
   try {
@@ -68,6 +69,13 @@ export async function generateMetadata({
   };
 }
 
+function replaceShortcodes(content: string) {
+  return content.replace(
+    /\[bsa_pro_ad_space id=6\]/g,
+    `<div class="my-10"></div>`
+  );
+}
+
 const ContentPage = async ({
   params,
 }: {
@@ -75,7 +83,9 @@ const ContentPage = async ({
 }) => {
   const data = await fetchData((await params).slug);
 
-  console.log(data)
+  const processedContent = replaceShortcodes(data.content);
+
+  const containsWpBlocks = data.content.includes("<!-- wp:");
 
   if (!data) return <NotFoundComponent />;
 
@@ -112,10 +122,16 @@ const ContentPage = async ({
               <ShareComponent title={data.title} slug={data.slug} />
 
               <div className="md:mt-6 mt-4">
-                <div
-                  dangerouslySetInnerHTML={{ __html: data.content }}
-                  className="mt-5 md:mt-10 text-sm md:text-base content-custom lora-regular"
-                ></div>
+                {containsWpBlocks ? (
+                  <div className="prose lg:prose-lg max-w-4xl mx-auto space-y-6 mt-5 md:mt-10 text-sm md:text-base content-custom lora-regular">
+                    {parse(processedContent)}
+                  </div>
+                ) : (
+                  <div
+                    dangerouslySetInnerHTML={{ __html: data.content }}
+                    className="mt-5 md:mt-10 text-sm md:text-base content-custom lora-regular"
+                  ></div>
+                )}
               </div>
 
               <div className="flex gap-3 flex-wrap mt-4">

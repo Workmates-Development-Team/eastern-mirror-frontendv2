@@ -35,6 +35,7 @@
     "embla-carousel-react": "^8.5.2",
     "formik": "^2.4.6",
     "framer-motion": "^12.0.0",
+    "html-react-parser": "^5.2.3",
     "input-otp": "^1.4.2",
     "jodit-react": "^5.0.10",
     "lucide-react": "^0.473.0",
