@@ -7,6 +7,8 @@ import { getImageUrl } from "@/utils/getImageUrl";
 import { Metadata } from "next";
 import Link from "next/link";
 import parse from "html-react-parser";
+import { notFound } from "next/navigation";
+import Head from "next/head";
 
 const fetchData = async (slug: string) => {
   try {
@@ -83,14 +85,56 @@ const ContentPage = async ({
 }) => {
   const data = await fetchData((await params).slug);
 
-  const processedContent = replaceShortcodes(data.content);
 
-  const containsWpBlocks = data.content.includes("<!-- wp:");
+  if (!data) {
+    notFound()
+  };
 
-  if (!data) return <NotFoundComponent />;
 
+   const newsArticleSchema = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://www.easternmirrornagaland.com/${data.slug}`
+    },
+    "headline": data.title,
+    "description": data.excerpt || data.plainTextContent || "",
+    "articleBody": data.content ? data.content.replace(/(<([^>]+)>)/gi, "") : "Full Article", // strip HTML tags if needed
+    "inLanguage": "en",
+    "image": getImageUrl(data.thumbnail) || "", 
+    "author": {
+      "@type": "Person",
+      "name": data.author?.name || "Unknown Author",
+      "url": data.author?.username
+        ? `https://www.easternmirrornagaland.com/author/${data.author.username}`
+        : undefined,
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Eastern Mirror",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.easternmirrornagaland.com/logo.png" // Use your real logo image URL here
+      }
+    },
+    "datePublished": data.publishedAt,
+    "dateModified": data.updatedAt || data.publishedAt,
+  };
+
+  
+  const processedContent = replaceShortcodes(data?.content);
+
+  const containsWpBlocks = data?.content?.includes("<!-- wp:");
   return (
     <div className="min-h-screen">
+            <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(newsArticleSchema) }}
+        />
+      </Head>
+
       <div className="container py-2 px-4 md:px-6 mt-3">
         <BreadcrumbComponent
           links={[{ label: "Home", href: "/" }, { label: data.title }]}

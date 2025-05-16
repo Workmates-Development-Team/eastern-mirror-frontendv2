@@ -5,7 +5,7 @@ import { fetchBlogSlugs } from "@/lib/api";
 import { format } from "date-fns";
 
 export async function GET() {
-  const articles = await fetchBlogSlugs(); // Should return latest 2 days' news articles
+  const articles = await fetchBlogSlugs();
 
   const siteName = "Eastern Mirror";
   const baseUrl = "https://www.easternmirrornagaland.com";
@@ -20,33 +20,28 @@ export async function GET() {
     http://www.sitemaps.org/schemas/sitemap/0.9 
     http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
   ">
-
   ${articles
     .map((article: any) => {
-      const url = `${baseUrl}/${article.slug}`;
-      const publishedDate = format(
-        new Date(article.publishedAt),
-        "yyyy-MM-dd'T'HH:mm:ssXXX"
-      );
+      const url = escapeXML(`${baseUrl}/${article.slug}`);
+      const publishedDate = format(new Date(article.publishedAt), "yyyy-MM-dd'T'HH:mm:ssXXX");
       const title = escapeXML(article.title);
       const keywords = escapeXML(article.metaKeyWord?.join(", ") || article?.tags?.join(", ") || "");
-      const image = baseUrl +  article.thumbnail || "";
+      const imageUrl = article.thumbnail ? escapeXML(`${baseUrl}${article.thumbnail}`) : "";
 
       return `
 <url>
   <loc>${url}</loc>
   <news:news>
     <news:publication>
-      <news:name>${siteName}</news:name>
+      <news:name>${escapeXML(siteName)}</news:name>
       <news:language>en</news:language>
     </news:publication>
     <news:publication_date>${publishedDate}</news:publication_date>
     <news:title>${title}</news:title>
     ${keywords ? `<news:keywords>${keywords}</news:keywords>` : ""}
   </news:news>
-  ${image ? `<image:image><image:loc>${image}</image:loc></image:image>` : ""}
-</url>
-      `;
+  ${imageUrl ? `<image:image><image:loc>${imageUrl}</image:loc></image:image>` : ""}
+</url>`;
     })
     .join("\n")}
 </urlset>`;
@@ -59,6 +54,7 @@ export async function GET() {
 }
 
 function escapeXML(str: string) {
+  if (!str) return "";
   return str
     .replace(/&/g, "&amp;")
     .replace(/"/g, "&quot;")

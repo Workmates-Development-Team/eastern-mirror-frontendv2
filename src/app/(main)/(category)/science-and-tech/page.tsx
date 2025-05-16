@@ -1,7 +1,5 @@
 import SubPage from "@/components/SubPage";
 import { Metadata } from "next";
-import Head from "next/head";
-import Link from "next/link";
 
 const IndiaPage = async () => {
   return (
@@ -41,6 +39,5 @@ export const metadata: Metadata = {
       "Stay updated with the latest breakthroughs in science and technology. Explore trends, discoveries, and innovations shaping the future.",
   },
 };
-
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 export default IndiaPage;

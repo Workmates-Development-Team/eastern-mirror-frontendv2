@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
 
@@ -13,10 +14,10 @@ const AboutUs = () => {
               </h2>
               <p className="mt-4 text-gray-600 text-lg">
                 Eastern Mirror is a premier source for the latest news and
-                insights from the Northeast region of India. &apos;Journalism for
-                Justice&apos; is the principle behind which we firmly stand and we
-                provide a fair and unbiased platform for issues that matter and
-                impact our readers. Established with a commitment to
+                insights from the Northeast region of India. &apos;Journalism
+                for Justice&apos; is the principle behind which we firmly stand
+                and we provide a fair and unbiased platform for issues that
+                matter and impact our readers. Established with a commitment to
                 journalistic integrity, we aim to provide our readers with
                 verified, timely, and engaging content covering a wide array of
                 topics including politics, culture, sports and more.
@@ -51,7 +52,6 @@ const AboutUs = () => {
               <p className="mt-4 text-gray-600 text-lg">
                 Thank you for visiting us!
               </p>
-              
             </div>
             {/* <div className="mt-12 md:mt-0">
                 <img src="https://images.unsplash.com/photo-1531973576160-7125cd663d86" alt="About Us Image" className="object-cover rounded-lg shadow-md" />
@@ -61,6 +61,26 @@ const AboutUs = () => {
       </section>
     </div>
   );
+};
+
+export const metadata: Metadata = {
+  title: "About Eastern Mirror: Your Trusted News Source",
+  description:
+    "Learn about Eastern Mirror’s mission, values, editorial team, and dedication to trusted news reporting.",
+  keywords: [
+    "about Eastern Mirror",
+    "news mission",
+    "editorial team",
+    "trusted journalism",
+    "company info",
+    "media organization",
+  ],
+  openGraph: {
+    url: "https://www.easternmirrornagaland.com/about-us",
+    title: "About Eastern Mirror: Your Trusted News Source",
+    description:
+      "Learn about Eastern Mirror’s mission, values, editorial team, and dedication to trusted news reporting.",
+  },
 };
 
 export default AboutUs;

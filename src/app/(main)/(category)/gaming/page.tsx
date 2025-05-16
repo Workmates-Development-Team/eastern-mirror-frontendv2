@@ -17,8 +17,18 @@ const GamingPage = async () => {
 };
 
 export const metadata: Metadata = {
-    title: "India Articles - Latest News",
-    description: "Explore the latest news and articles about Nagaland. Stay updated with the top stories and insights.",
+  title: "Latest Gaming News, Reviews & Trends – Eastern Mirror",
+  description:
+    "Stay ahead with updates on video games, reviews, esports, gaming culture, and tech news from Nagaland and beyond.",
+  keywords: [
+   "gaming news", "game reviews", "esports", "video games", "gaming trends", "online games", "tech and gaming"
+  ],
+  openGraph: {
+    url: "https://www.easternmirrornagaland.com/gaming",
+    title: "Latest Gaming News, Reviews & Trends – Eastern Mirro",
+    description:
+      "Stay ahead with updates on video games, reviews, esports, gaming culture, and tech news from Nagaland and beyond.",
+  },
 };
 
 export const dynamic = 'force-dynamic';

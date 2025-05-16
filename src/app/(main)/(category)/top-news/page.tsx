@@ -16,8 +16,18 @@ const IndiaPage = async () => {
 };
 
 export const metadata: Metadata = {
-    title: "India Articles - Latest News",
-    description: "Explore the latest news and articles about Nagaland. Stay updated with the top stories and insights.",
+  title: "Top Headlines & Today’s Highlights – Eastern Mirror",
+  description:
+    "Catch up on the biggest news stories of the day with expert coverage from Nagaland and beyond.",
+  keywords: [
+   "top news", "headlines today", "daily highlights", "breaking stories", "important news", "major updates", "headline news"
+  ],
+  openGraph: {
+    url: "https://www.easternmirrornagaland.com/top-news",
+    title: "Top Headlines & Today’s Highlights – Eastern Mirror",
+    description:
+      "Catch up on the biggest news stories of the day with expert coverage from Nagaland and beyond.",
+  },
 };
 
 export const dynamic = 'force-dynamic';

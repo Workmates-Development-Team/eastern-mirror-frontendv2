@@ -6,7 +6,7 @@ import {
   QueryClientProvider,
   useQuery,
 } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
 import Loader from "./Loader";
 import BreadcrumbComponent from "./BreadcrumbConponent";
 import Heading from "./main/Heading";
@@ -102,8 +102,8 @@ const SubPageComponent = ({
       category === "tag"
         ? fetchTagArticles(page, slug)
         : category === "author"
-        ? fetchAuthorrticles(page, slug)
-        : fetchCategoryArticles(category, page),
+          ? fetchAuthorrticles(page, slug)
+          : fetchCategoryArticles(category, page),
     staleTime: 60000,
     refetchOnWindowFocus: false,
     retry: 1,
@@ -141,6 +141,9 @@ const SubPageComponent = ({
     router.push("/");
     return null;
   }
+  if (!data?.articles?.length) {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen">
@@ -148,7 +151,16 @@ const SubPageComponent = ({
         <BreadcrumbComponent links={[{ label: "Home", href: "/" }, ...links]} />
       </div>
 
-      <Heading title={title} />
+      {
+        category === "tag" ? <div className="container mt-10 px-4 md:px-6"> <h2 className="text-[#000] mb-2 text-2xl font-bold">
+          Articles Tagged With - <span className="capitalize">"{title}"</span>
+        </h2> </div>: category === 'author'? <div className="container mt-10 px-4 md:px-6"> <h2 className="text-[#000] mb-2 text-2xl font-bold">
+          Articles Tagged With - <span className="capitalize">"{title}"</span>
+        </h2> </div> : <Heading title={title} />
+
+
+      }
+
 
       <div className="container py-2 px-4 md:px-6 grid md:grid-cols-3 grid-cols-1 gap-7 mt-3">
         <div className="md:col-span-2">
@@ -236,9 +248,8 @@ const Card = ({ data }: { data: any }) => {
           <Image
             width={300}
             height={200}
-            className={`w-full h-full max-h-[200px] ${
-              data.thumbnail ? "object-cover" : "object-contain p-2"
-            }`}
+            className={`w-full h-full max-h-[200px] ${data.thumbnail ? "object-cover" : "object-contain p-2"
+              }`}
             src={getImageUrl(data?.thumbnail)}
             alt={data.title}
             onLoadingComplete={() => setIsLoading(false)}
