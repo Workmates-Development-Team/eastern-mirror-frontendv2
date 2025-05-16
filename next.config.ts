@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['api.easternmirrornagaland.com', 'localhost'],
   },
+
+  async redirects() {
+    return [
+      {
+        source: '/:slug+/',
+        destination: '/:slug',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

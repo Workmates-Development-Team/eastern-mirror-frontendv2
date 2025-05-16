@@ -20,12 +20,15 @@ const fetchData = async (slug: string) => {
   }
 };
 
+const normalizeSlug = (slug: string) => slug.replace(/\/$/, "");
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const article = await fetchData((await params).slug);
+  const slug = normalizeSlug((await params).slug);
+  const article = await fetchData(slug);
 
   if (!article) {
     return {
@@ -35,9 +38,7 @@ export async function generateMetadata({
     };
   }
 
-  const canonicalUrl = `https://www.easternmirrornagaland.com/${
-    (await params).slug
-  }`;
+  const canonicalUrl = `https://www.easternmirrornagaland.com/${slug}`;
 
   return {
     title: article.title,
@@ -85,53 +86,54 @@ const ContentPage = async ({
 }) => {
   const data = await fetchData((await params).slug);
 
-
   if (!data) {
-    notFound()
-  };
+    notFound();
+  }
 
-
-   const newsArticleSchema = {
+  const newsArticleSchema = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
-    "mainEntityOfPage": {
+    mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://www.easternmirrornagaland.com/${data.slug}`
+      "@id": `https://www.easternmirrornagaland.com/${data.slug}`,
     },
-    "headline": data.title,
-    "description": data.excerpt || data.plainTextContent || "",
-    "articleBody": data.content ? data.content.replace(/(<([^>]+)>)/gi, "") : "Full Article", // strip HTML tags if needed
-    "inLanguage": "en",
-    "image": getImageUrl(data.thumbnail) || "", 
-    "author": {
+    headline: data.title,
+    description: data.excerpt || data.plainTextContent || "",
+    articleBody: data.content
+      ? data.content.replace(/(<([^>]+)>)/gi, "")
+      : "Full Article", // strip HTML tags if needed
+    inLanguage: "en",
+    image: getImageUrl(data.thumbnail) || "",
+    author: {
       "@type": "Person",
-      "name": data.author?.name || "Unknown Author",
-      "url": data.author?.username
+      name: data.author?.name || "Unknown Author",
+      url: data.author?.username
         ? `https://www.easternmirrornagaland.com/author/${data.author.username}`
         : undefined,
     },
-    "publisher": {
+    publisher: {
       "@type": "Organization",
-      "name": "Eastern Mirror",
-      "logo": {
+      name: "Eastern Mirror",
+      logo: {
         "@type": "ImageObject",
-        "url": "https://www.easternmirrornagaland.com/logo.png" // Use your real logo image URL here
-      }
+        url: "https://www.easternmirrornagaland.com/logo.png", // Use your real logo image URL here
+      },
     },
-    "datePublished": data.publishedAt,
-    "dateModified": data.updatedAt || data.publishedAt,
+    datePublished: data.publishedAt,
+    dateModified: data.updatedAt || data.publishedAt,
   };
 
-  
   const processedContent = replaceShortcodes(data?.content);
 
   const containsWpBlocks = data?.content?.includes("<!-- wp:");
   return (
     <div className="min-h-screen">
-            <Head>
+      <Head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(newsArticleSchema) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(newsArticleSchema),
+          }}
         />
       </Head>
 
