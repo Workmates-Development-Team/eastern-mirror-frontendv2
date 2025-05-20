@@ -2,7 +2,7 @@ import BreadcrumbComponent from "@/components/BreadcrumbConponent";
 import NotFoundComponent from "@/components/not-found";
 import ShareComponent from "@/components/ShareComponent";
 import axiosServer from "@/utils/axiosServer";
-import { formatDate } from "@/utils/date";
+import { formatDate, isValidDate } from "@/utils/date";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -149,7 +149,9 @@ const ContentPage = async ({
                 {data.title}
               </h1>
               <p className="mt-2.5 text-[#9B9B9B] md:text-sm text-xs roboto-regular">
-                Published on {formatDate(data.publishedAt)}
+                Published on   {isValidDate(data?.publishedAt)
+                            ? formatDate(data.publishedAt)
+                            : formatDate(data?.createdAt)}
               </p>
               <p className="text-[#9B9B9B] md:text-sm text-xs roboto-regular">
                 By{" "}

@@ -53,3 +53,8 @@ export function formatDate(isoDateString: string): string {
 
   return formattedDate;
 }
+
+export function isValidDate(date: any) {
+  const d = new Date(date);
+  return !isNaN(d.getTime());
+}

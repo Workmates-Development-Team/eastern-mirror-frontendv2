@@ -13,7 +13,7 @@ import Heading from "./main/Heading";
 import { Pagination } from "@mui/material";
 import Link from "next/link";
 import { getImageUrl } from "@/utils/getImageUrl";
-import { formatDate } from "@/utils/date";
+import { formatDate, isValidDate } from "@/utils/date";
 import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 import axiosServer from "@/utils/axiosServer";
@@ -102,8 +102,8 @@ const SubPageComponent = ({
       category === "tag"
         ? fetchTagArticles(page, slug)
         : category === "author"
-          ? fetchAuthorrticles(page, slug)
-          : fetchCategoryArticles(category, page),
+        ? fetchAuthorrticles(page, slug)
+        : fetchCategoryArticles(category, page),
     staleTime: 60000,
     refetchOnWindowFocus: false,
     retry: 1,
@@ -151,16 +151,23 @@ const SubPageComponent = ({
         <BreadcrumbComponent links={[{ label: "Home", href: "/" }, ...links]} />
       </div>
 
-      {
-        category === "tag" ? <div className="container mt-10 px-4 md:px-6"> <h2 className="text-[#000] mb-2 text-2xl font-bold">
-          Articles Tagged With - <span className="capitalize">"{title}"</span>
-        </h2> </div>: category === 'author'? <div className="container mt-10 px-4 md:px-6"> <h2 className="text-[#000] mb-2 text-2xl font-bold">
-          Articles Tagged With - <span className="capitalize">"{title}"</span>
-        </h2> </div> : <Heading title={title} />
-
-
-      }
-
+      {category === "tag" ? (
+        <div className="container mt-10 px-4 md:px-6">
+          {" "}
+          <h2 className="text-[#000] mb-2 text-2xl font-bold">
+            Articles Tagged With - <span className="capitalize">"{title}"</span>
+          </h2>{" "}
+        </div>
+      ) : category === "author" ? (
+        <div className="container mt-10 px-4 md:px-6">
+          {" "}
+          <h2 className="text-[#000] mb-2 text-2xl font-bold">
+            Articles Tagged With - <span className="capitalize">"{title}"</span>
+          </h2>{" "}
+        </div>
+      ) : (
+        <Heading title={title} />
+      )}
 
       <div className="container py-2 px-4 md:px-6 grid md:grid-cols-3 grid-cols-1 gap-7 mt-3">
         <div className="md:col-span-2">
@@ -237,6 +244,7 @@ const Card = ({ data }: { data: any }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const firstText = extractFirstText(data?.content, 100);
+  console.log(data?.publishedAt);
 
   return (
     <div className="bg-[#F5F6F9] grid grid-cols-6 md:gap-7 gap-3">
@@ -248,8 +256,9 @@ const Card = ({ data }: { data: any }) => {
           <Image
             width={300}
             height={200}
-            className={`w-full h-full max-h-[200px] ${data.thumbnail ? "object-cover" : "object-contain p-2"
-              }`}
+            className={`w-full h-full max-h-[200px] ${
+              data.thumbnail ? "object-cover" : "object-contain p-2"
+            }`}
             src={getImageUrl(data?.thumbnail)}
             alt={data.title}
             onLoadingComplete={() => setIsLoading(false)}
@@ -267,7 +276,9 @@ const Card = ({ data }: { data: any }) => {
           {firstText}...
         </div>
         <p className="text-xs text-[#BBBBBB] hidden md:block">
-          {formatDate(data?.publishedAt)}
+          {isValidDate(data?.publishedAt)
+            ? formatDate(data.publishedAt)
+            : formatDate(data?.createdAt)}
         </p>
       </div>
     </div>
