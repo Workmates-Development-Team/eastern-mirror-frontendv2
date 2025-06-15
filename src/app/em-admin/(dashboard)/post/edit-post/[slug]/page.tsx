@@ -19,6 +19,7 @@ import TextEditor from "@/components/admin/TextEditor";
 import axiosServer from "@/utils/axiosServer";
 import { getImageUrl } from "@/utils/getImageUrl";
 import Gallery from "@/components/admin/Gallery";
+import TipTapEditor from "@/components/Editor/TipTapEditor";
 
 type CategoryOption = {
   name: string;
@@ -353,9 +354,14 @@ const EditPost = () => {
         </div>
 
 
-      <div className="border border-gray-300 rounded-md p-4 mb-6 mt-6">
-        <TextEditor value={value} setValue={setValue} setPlainText={setPlainText} plainText={plainText} />
+      <div className="mb-6 mt-6">
+         <TipTapEditor
+        content={value}
+        setContent={setValue}
+      />
       </div>
+
+     
 
       <Box sx={{ display: "flex", justifyContent: "end" }}>
         <Button className="bg-[#00A76F]" onClick={handleSubmit}>

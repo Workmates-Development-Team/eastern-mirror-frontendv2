@@ -26,6 +26,7 @@ import "./style.css";
 import TextEditor from "@/components/admin/TextEditor";
 import Gallery from "@/components/admin/Gallery";
 import { getImageUrl } from "@/utils/getImageUrl";
+import TipTapEditor from "@/components/Editor/TipTapEditor";
 // Dynamically import ReactQuill with no SSR
 // const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -62,7 +63,13 @@ const AddPost = () => {
     new Date().toISOString()
   );
   const router = useRouter();
-  const [plainText, setPlainText] = useState("");
+
+   
+  const getPlainText = (html: string) => {
+    const tempElement = document.createElement("div");
+    tempElement.innerHTML = html;
+    return tempElement.textContent || tempElement.innerText || "";
+  };
 
   useEffect(() => {
     sessionStorage.setItem("postTitle", title);
@@ -126,7 +133,7 @@ const AddPost = () => {
 
       formData.append("thumbnail", thumbnail);
       formData.append("publishedAt", publishedAt);
-      formData.append("plainTextContent", plainText);
+      formData.append("plainTextContent", getPlainText(value));
       formData.append("excerpt", excerpt);
       formData.append(
         "metaKeyWord",
@@ -155,19 +162,19 @@ const AddPost = () => {
     setThumbnail("");
   };
 
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue =
-        "You have unsaved changes. Do you want to save the draft or leave the page?";
-    };
+  // useEffect(() => {
+  //   const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+  //     e.preventDefault();
+  //     e.returnValue =
+  //       "You have unsaved changes. Do you want to save the draft or leave the page?";
+  //   };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [title, value]);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, [title, value]);
 
   const handleClearForm = () => {
     setTitle("");
@@ -398,11 +405,16 @@ const AddPost = () => {
         </div>
       </div>
 
-      <TextEditor
+      {/* <TextEditor
         value={value}
         setValue={setValue}
         plainText={plainText}
         setPlainText={setPlainText}
+      /> */}
+
+      <TipTapEditor
+        content={value}
+        setContent={setValue}
       />
 
       <div className="flex gap-4 mt-4">

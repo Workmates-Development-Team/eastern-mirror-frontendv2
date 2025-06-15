@@ -9,6 +9,7 @@ import Link from "next/link";
 import parse from "html-react-parser";
 import { notFound } from "next/navigation";
 import Head from "next/head";
+import * as cheerio from 'cheerio'
 
 const fetchData = async (slug: string) => {
   try {
@@ -126,6 +127,40 @@ const ContentPage = async ({
   const processedContent = replaceShortcodes(data?.content);
 
   const containsWpBlocks = data?.content?.includes("<!-- wp:");
+
+  function transformImgCaptions(html: string): string {
+  const $ = cheerio.load(html);
+
+  $('img[caption]').each((_: any, img: any) => {
+    const $img = $(img);
+    const captionText = $img.attr('caption');
+
+    if (captionText) {
+      // Create figure and figcaption
+      const $figure = $('<figure>').css('text-align', 'center');
+      const $figcaption = $('<figcaption>')
+        .text(captionText)
+        .css({
+          color: '#6b7280', // faded gray
+          'font-weight': '500',
+          'padding-top': '0.5em',
+          'padding-bottom': '1em',
+          'font-size': '0.95em',
+        });
+
+      // Clone and clean the image
+      const $imgClone = $img.clone().removeAttr('caption');
+      $imgClone.css({ maxWidth: '100%', height: 'auto' });
+
+      $figure.append($imgClone).append($figcaption);
+      $img.replaceWith($figure);
+    }
+  });
+
+  return $.html();
+}
+
+
   return (
     <div className="min-h-screen">
       <Head>
@@ -148,6 +183,7 @@ const ContentPage = async ({
               <h1 className="md:text-2xl text-[21px] leading-tight md:leading-normal lora-bold">
                 {data.title}
               </h1>
+              <p className="lora-regular text-[#9B9B9B] mt-1 mb-1">{data?.excerpt}</p>
               <p className="mt-2.5 text-[#9B9B9B] md:text-sm text-xs roboto-regular">
                 Published on   {isValidDate(data?.publishedAt)
                             ? formatDate(data.publishedAt)
@@ -176,7 +212,7 @@ const ContentPage = async ({
                   </div>
                 ) : (
                   <div
-                    dangerouslySetInnerHTML={{ __html: data.content }}
+                    dangerouslySetInnerHTML={{ __html: transformImgCaptions(data.content) }}
                     className="mt-5 md:mt-10 text-sm md:text-base content-custom lora-regular"
                   ></div>
                 )}
