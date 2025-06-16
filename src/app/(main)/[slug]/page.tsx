@@ -129,36 +129,44 @@ const ContentPage = async ({
   const containsWpBlocks = data?.content?.includes("<!-- wp:");
 
   function transformImgCaptions(html: string): string {
-  const $ = cheerio.load(html);
+    const $ = cheerio.load(html);
 
-  $('img[caption]').each((_: any, img: any) => {
-    const $img = $(img);
-    const captionText = $img.attr('caption');
+    // Add spacing to all direct children of body if not already spaced
+    $('body').children().each((_, el) => {
+      const $el = $(el);
+      // Add margin-bottom if not already present
+      const style = $el.attr('style') || '';
+      if (!/margin-bottom\s*:\s*\d/.test(style)) {
+        $el.attr('style', `${style};margin-bottom:1.5em;`);
+      }
+    });
 
-    if (captionText) {
-      // Create figure and figcaption
-      const $figure = $('<figure>').css('text-align', 'center');
-      const $figcaption = $('<figcaption>')
-        .text(captionText)
-        .css({
-          color: '#6b7280', // faded gray
-          'font-weight': '500',
-          'padding-top': '0.5em',
-          'padding-bottom': '1em',
-          'font-size': '0.95em',
-        });
+    $('img[caption]').each((_: any, img: any) => {
+      const $img = $(img);
+      const captionText = $img.attr('caption');
 
-      // Clone and clean the image
-      const $imgClone = $img.clone().removeAttr('caption');
-      $imgClone.css({ maxWidth: '100%', height: 'auto' });
+      if (captionText) {
+        // Create figure and figcaption
+        const $figure = $('<figure>').css('text-align', 'center');
+        const $figcaption = $('<figcaption>')
+          .text(captionText)
+          .css({
+            color: '#6b7280', // faded gray
+            'font-weight': '600',
+            'font-size': '0.95em',
+          });
 
-      $figure.append($imgClone).append($figcaption);
-      $img.replaceWith($figure);
-    }
-  });
+        // Clone and clean the image
+        const $imgClone = $img.clone().removeAttr('caption');
+        $imgClone.css({ maxWidth: '100%', height: 'auto' });
 
-  return $.html();
-}
+        $figure.append($imgClone).append($figcaption);
+        $img.replaceWith($figure);
+      }
+    });
+
+    return $.html();
+  }
 
 
   return (
