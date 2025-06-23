@@ -133,16 +133,6 @@ const ContentPage = async ({
     const $ = cheerio.load(html);
 
     // Add spacing to all direct children of body if not already spaced
-    $("body")
-      .children()
-      .each((_, el) => {
-        const $el = $(el);
-        // Add margin-bottom if not already present
-        const style = $el.attr("style") || "";
-        if (!/margin-bottom\s*:\s*\d/.test(style)) {
-          $el.attr("style", `${style};margin-bottom:1.5em;`);
-        }
-      });
 
     $("img[caption]").each((_: any, img: any) => {
       const $img = $(img);
@@ -165,6 +155,33 @@ const ContentPage = async ({
         $img.replaceWith($figure);
       }
     });
+
+     // ✅ Remove rel="nofollow" and similar from all <a> tags
+  $("a").each((_, el) => {
+    const $el = $(el);
+    const rel = $el.attr("rel");
+    if (rel) {
+      const filteredRel = rel
+        .split(" ")
+        .filter((token) => token !== "nofollow")
+        .join(" ");
+      if (filteredRel) {
+        $el.attr("rel", filteredRel);
+      } else {
+        $el.removeAttr("rel");
+      }
+    }
+  });
+   $("p").each((_, el) => {
+    const $el = $(el);
+    const htmlContent = $el.html()?.trim();
+    if (!htmlContent) {
+      $el.html("<br>");
+    }
+  });
+
+  // 5. Remove <br class="ProseMirror-trailingBreak">
+  $("br.ProseMirror-trailingBreak").remove();
 
     return $.html();
   }

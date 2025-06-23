@@ -122,6 +122,8 @@ const TipTapEditor = ({
     }
   }, [content, editor]);
 
+  console.log(content)
+
   const decodeEmbeddedHtml = (html: string) => {
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
