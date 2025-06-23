@@ -158,21 +158,7 @@ const ContentPage = async ({
     });
 
     // ✅ Remove rel="nofollow" and similar from all <a> tags
-    $("a").each((_, el) => {
-      const $el = $(el);
-      const rel = $el.attr("rel");
-      if (rel) {
-        const filteredRel = rel
-          .split(" ")
-          .filter((token) => token !== "nofollow")
-          .join(" ");
-        if (filteredRel) {
-          $el.attr("rel", filteredRel);
-        } else {
-          $el.removeAttr("rel");
-        }
-      }
-    });
+    $("a").removeAttr("rel");
     $("p").each((_, el) => {
       const $el = $(el);
       const htmlContent = $el.html()?.trim();
