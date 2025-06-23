@@ -134,6 +134,7 @@ const ContentPage = async ({
 
     // Add spacing to all direct children of body if not already spaced
 
+
     $("img[caption]").each((_: any, img: any) => {
       const $img = $(img);
       const captionText = $img.attr("caption");
@@ -156,32 +157,50 @@ const ContentPage = async ({
       }
     });
 
-     // ✅ Remove rel="nofollow" and similar from all <a> tags
-  $("a").each((_, el) => {
-    const $el = $(el);
-    const rel = $el.attr("rel");
-    if (rel) {
-      const filteredRel = rel
-        .split(" ")
-        .filter((token) => token !== "nofollow")
-        .join(" ");
-      if (filteredRel) {
-        $el.attr("rel", filteredRel);
-      } else {
-        $el.removeAttr("rel");
+    // ✅ Remove rel="nofollow" and similar from all <a> tags
+    $("a").each((_, el) => {
+      const $el = $(el);
+      const rel = $el.attr("rel");
+      if (rel) {
+        const filteredRel = rel
+          .split(" ")
+          .filter((token) => token !== "nofollow")
+          .join(" ");
+        if (filteredRel) {
+          $el.attr("rel", filteredRel);
+        } else {
+          $el.removeAttr("rel");
+        }
       }
-    }
-  });
-   $("p").each((_, el) => {
-    const $el = $(el);
-    const htmlContent = $el.html()?.trim();
-    if (!htmlContent) {
-      $el.html("<br>");
-    }
-  });
+    });
+    $("p").each((_, el) => {
+      const $el = $(el);
+      const htmlContent = $el.html()?.trim();
+      if (!htmlContent) {
+        $el.html("<br>");
+      }
+    });
 
-  // 5. Remove <br class="ProseMirror-trailingBreak">
-  $("br.ProseMirror-trailingBreak").remove();
+    // 5. Remove <br class="ProseMirror-trailingBreak">
+    $("br.ProseMirror-trailingBreak").remove();
+
+    $("*[style]").each((_, el) => {
+      const $el = $(el);
+      const style = $el.attr("style") || "";
+
+      // Remove any font-family declarations
+      const cleanedStyle = style
+        .split(";")
+        .map((s) => s.trim())
+        .filter((rule) => !/^font-family\s*:/i.test(rule)) // Remove font-family
+        .join(";");
+
+      if (cleanedStyle) {
+        $el.attr("style", cleanedStyle);
+      } else {
+        $el.removeAttr("style");
+      }
+    });
 
     return $.html();
   }
