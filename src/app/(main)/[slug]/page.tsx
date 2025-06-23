@@ -9,7 +9,7 @@ import Link from "next/link";
 import parse from "html-react-parser";
 import { notFound } from "next/navigation";
 import Head from "next/head";
-import * as cheerio from 'cheerio'
+import * as cheerio from "cheerio";
 
 const fetchData = async (slug: string) => {
   try {
@@ -70,6 +70,7 @@ export async function generateMetadata({
       description: article.excerpt || article.plainTextContent,
       images: [getImageUrl(article.thumbnail) || "/default-image.jpg"],
     },
+    robots: "index, follow",
   };
 }
 
@@ -132,33 +133,33 @@ const ContentPage = async ({
     const $ = cheerio.load(html);
 
     // Add spacing to all direct children of body if not already spaced
-    $('body').children().each((_, el) => {
-      const $el = $(el);
-      // Add margin-bottom if not already present
-      const style = $el.attr('style') || '';
-      if (!/margin-bottom\s*:\s*\d/.test(style)) {
-        $el.attr('style', `${style};margin-bottom:1.5em;`);
-      }
-    });
+    $("body")
+      .children()
+      .each((_, el) => {
+        const $el = $(el);
+        // Add margin-bottom if not already present
+        const style = $el.attr("style") || "";
+        if (!/margin-bottom\s*:\s*\d/.test(style)) {
+          $el.attr("style", `${style};margin-bottom:1.5em;`);
+        }
+      });
 
-    $('img[caption]').each((_: any, img: any) => {
+    $("img[caption]").each((_: any, img: any) => {
       const $img = $(img);
-      const captionText = $img.attr('caption');
+      const captionText = $img.attr("caption");
 
       if (captionText) {
         // Create figure and figcaption
-        const $figure = $('<figure>').css('text-align', 'center');
-        const $figcaption = $('<figcaption>')
-          .text(captionText)
-          .css({
-            color: '#6b7280', // faded gray
-            'font-weight': '600',
-            'font-size': '0.95em',
-          });
+        const $figure = $("<figure>").css("text-align", "center");
+        const $figcaption = $("<figcaption>").text(captionText).css({
+          color: "#6b7280", // faded gray
+          "font-weight": "600",
+          "font-size": "0.95em",
+        });
 
         // Clone and clean the image
-        const $imgClone = $img.clone().removeAttr('caption');
-        $imgClone.css({ maxWidth: '100%', height: 'auto' });
+        const $imgClone = $img.clone().removeAttr("caption");
+        $imgClone.css({ maxWidth: "100%", height: "auto" });
 
         $figure.append($imgClone).append($figcaption);
         $img.replaceWith($figure);
@@ -167,7 +168,6 @@ const ContentPage = async ({
 
     return $.html();
   }
-
 
   return (
     <div className="min-h-screen">
@@ -191,11 +191,14 @@ const ContentPage = async ({
               <h1 className="md:text-2xl text-[21px] leading-tight md:leading-normal lora-bold">
                 {data.title}
               </h1>
-              <p className="lora-regular text-[#9B9B9B] mt-1 mb-1">{data?.excerpt}</p>
+              <p className="lora-regular text-[#9B9B9B] mt-1 mb-1">
+                {data?.excerpt}
+              </p>
               <p className="mt-2.5 text-[#9B9B9B] md:text-sm text-xs roboto-regular">
-                Published on   {isValidDate(data?.publishedAt)
-                            ? formatDate(data.publishedAt)
-                            : formatDate(data?.createdAt)}
+                Published on{" "}
+                {isValidDate(data?.publishedAt)
+                  ? formatDate(data.publishedAt)
+                  : formatDate(data?.createdAt)}
               </p>
               <p className="text-[#9B9B9B] md:text-sm text-xs roboto-regular">
                 By{" "}
@@ -220,7 +223,9 @@ const ContentPage = async ({
                   </div>
                 ) : (
                   <div
-                    dangerouslySetInnerHTML={{ __html: transformImgCaptions(data.content) }}
+                    dangerouslySetInnerHTML={{
+                      __html: transformImgCaptions(data.content),
+                    }}
                     className="mt-5 md:mt-10 text-sm md:text-base content-custom lora-regular"
                   ></div>
                 )}
