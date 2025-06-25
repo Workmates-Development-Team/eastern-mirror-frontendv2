@@ -88,7 +88,7 @@ export default function AuthorTable() {
                             <AvatarImage
                               src={
                                 row?.avatar
-                                  ? process.env.NEXT_PUBLIC_API_BASE_URL +
+                                  ? process.env.NEXT_PUBLIC_ASSETS_BASE_URL +
                                     row.avatar
                                   : "/images/noprofile.png"
                               }

@@ -325,7 +325,7 @@ const AddPost = () => {
                     className="rounded-full aspect-square h-5 w-5"
                     src={
                       option?.avatar
-                        ? process.env.NEXT_PUBLIC_API_BASE_URL + option.avatar
+                        ? process.env.NEXT_PUBLIC_ASSETS_BASE_URL + option.avatar
                         : "/images/noprofile.png"
                     }
                     alt=""

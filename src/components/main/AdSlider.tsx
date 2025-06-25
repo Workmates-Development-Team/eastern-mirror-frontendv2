@@ -46,6 +46,8 @@ export function AdSlider() {
     queryFn: () => getAds(),
     staleTime: 300000,
   });
+
+  console.log(data.items)
   return (
     <Carousel
       plugins={[

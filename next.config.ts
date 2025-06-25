@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    domains: ['api.easternmirrornagaland.com', 'localhost'],
+    domains: ['api.easternmirrornagaland.com', 'localhost', 'easternmirror-assets.s3.ap-south-1.amazonaws.com', 'westernmirror-assets.s3.ap-south-1.amazonaws.com'],
   },
 
   async redirects() {
