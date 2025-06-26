@@ -62,7 +62,7 @@ export function AdSlider() {
           <CarouselItem key={index}>
             <Link href={item.link} target="_blank" className="">
               <Image
-                className="w-full h-[450px] object-cover"
+                className="w-full h-[450px] object-contain"
                 width={293}
                 height={450}
                 src={getImageUrl(item?.imageUrl)}
