@@ -178,15 +178,15 @@ function EmbedPlaceholderComponent(props: NodeViewProps) {
             </div>
 
             <Tabs value={activeTab} onValueChange={(v: any) => setActiveTab(v)} className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="youtube">
                   <Youtube className="mr-2 h-4 w-4" />
                   YouTube
                 </TabsTrigger>
-                <TabsTrigger value="twitter">
+                {/* <TabsTrigger value="twitter">
                   <Twitter className="mr-2 h-4 w-4" />
                   Twitter
-                </TabsTrigger>
+                </TabsTrigger> */}
                 <TabsTrigger value="custom">
                   <Code className="mr-2 h-4 w-4" />
                   Custom

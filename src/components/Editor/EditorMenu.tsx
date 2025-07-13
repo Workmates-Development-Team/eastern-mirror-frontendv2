@@ -39,11 +39,13 @@ import {
   TableRowsSplit,
   TableColumnsSplit,
   Minimize2,
-  Maximize2
+  Maximize2,
+  Plus
 } from 'lucide-react';
 import { ImagePlaceholderToolbar } from './image-placeholder-toolbar';
 import { EmbedPlaceholderToolbar } from './embed-placeholder-toolbar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";  
 
 interface EditorMenuProps {
   editor: Editor | null;
@@ -98,6 +100,8 @@ const EditorMenu = ({ editor, isFocusMode, setIsFocusMode }: EditorMenuProps) =>
   const [tableRows, setTableRows] = useState(3);
   const [tableCols, setTableCols] = useState(3);
   const [showTableInput, setShowTableInput] = useState(false);
+  const [customTextColor, setCustomTextColor] = useState('#000000');
+  const [customHighlightColor, setCustomHighlightColor] = useState('#ffff00');
   
   if (!editor) {
     return null;
@@ -302,8 +306,8 @@ const EditorMenu = ({ editor, isFocusMode, setIsFocusMode }: EditorMenuProps) =>
               <Palette className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <div className="grid grid-cols-3 gap-1 p-2">
+          <DropdownMenuContent align="start" className="w-64">
+            {/* <div className="grid grid-cols-3 gap-1 p-2">
               {colors.map((color) => (
                 <div
                   key={color.value}
@@ -313,7 +317,38 @@ const EditorMenu = ({ editor, isFocusMode, setIsFocusMode }: EditorMenuProps) =>
                   title={color.label}
                 />
               ))}
-            </div>
+            </div> */}
+
+              <div className="p-2">
+              <div className="grid grid-cols-3 gap-1 mb-3">
+                {colors.map((color) => (
+                  <div
+                    key={color.value}
+                    className="w-6 h-6 rounded cursor-pointer border"
+                    style={{ backgroundColor: color.value }}
+                    onClick={() => editor.chain().focus().setColor(color.value).run()}
+                    title={color.label}
+                  />
+                ))}
+              </div>
+              <div className="flex items-center gap-2 pt-2 border-t">
+                <input
+                  type="color"
+                  value={customTextColor}
+                  onChange={(e) => setCustomTextColor(e.target.value)}
+                  className="w-8 h-8 rounded border cursor-pointer"
+                />
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => editor.chain().focus().setColor(customTextColor).run()}
+                  className="flex items-center gap-1"
+                >
+                  <Plus className="h-3 w-3" />
+                  Custom
+                </Button>
+              </div>
+              </div>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -323,8 +358,8 @@ const EditorMenu = ({ editor, isFocusMode, setIsFocusMode }: EditorMenuProps) =>
               <PaintBucket className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <div className="grid grid-cols-3 gap-1 p-2">
+          <DropdownMenuContent align="start" className="w-64">
+            {/* <div className="grid grid-cols-3 gap-1 p-2">
               {colors.map((color) => (
                 <div
                   key={color.value}
@@ -334,7 +369,38 @@ const EditorMenu = ({ editor, isFocusMode, setIsFocusMode }: EditorMenuProps) =>
                   title={color.label}
                 />
               ))}
-            </div>
+            </div> */}
+
+             <div className="p-2">
+              <div className="grid grid-cols-3 gap-1 mb-3">
+                {colors.map((color) => (
+                  <div
+                    key={color.value}
+                    className="w-6 h-6 rounded cursor-pointer border"
+                    style={{ backgroundColor: color.value }}
+                    onClick={() => editor.chain().focus().toggleHighlight({ color: color.value }).run()}
+                    title={color.label}
+                  />
+                ))}
+              </div>
+              <div className="flex items-center gap-2 pt-2 border-t">
+                <input
+                  type="color"
+                  value={customHighlightColor}
+                  onChange={(e) => setCustomHighlightColor(e.target.value)}
+                  className="w-8 h-8 rounded border cursor-pointer"
+                />
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => editor.chain().focus().toggleHighlight({ color: customHighlightColor }).run()}
+                  className="flex items-center gap-1"
+                >
+                  <Plus className="h-3 w-3" />
+                  Custom
+                </Button>
+              </div>
+              </div>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

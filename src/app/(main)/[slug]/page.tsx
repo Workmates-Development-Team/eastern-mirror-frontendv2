@@ -132,23 +132,18 @@ const ContentPage = async ({
   function transformImgCaptions(html: string): string {
     const $ = cheerio.load(html);
 
-    // Add spacing to all direct children of body if not already spaced
-
-
-    $("img[caption]").each((_: any, img: any) => {
+    // Transform images with caption attribute
+    $("img[caption]").each((_, img) => {
       const $img = $(img);
       const captionText = $img.attr("caption");
 
       if (captionText) {
-        // Create figure and figcaption
         const $figure = $("<figure>").css("text-align", "center");
         const $figcaption = $("<figcaption>").text(captionText).css({
-          color: "#6b7280", // faded gray
           "font-weight": "600",
           "font-size": "0.95em",
         });
 
-        // Clone and clean the image
         const $imgClone = $img.clone().removeAttr("caption");
         $imgClone.css({ maxWidth: "100%", height: "auto" });
 
@@ -157,8 +152,10 @@ const ContentPage = async ({
       }
     });
 
-    // ✅ Remove rel="nofollow" and similar from all <a> tags
+    // Remove rel attribute from all <a> tags
     $("a").removeAttr("rel");
+
+    // Replace empty <p> tags with <br>
     $("p").each((_, el) => {
       const $el = $(el);
       const htmlContent = $el.html()?.trim();
@@ -167,20 +164,18 @@ const ContentPage = async ({
       }
     });
 
-    // 5. Remove <br class="ProseMirror-trailingBreak">
+    // Remove <br class="ProseMirror-trailingBreak">
     $("br.ProseMirror-trailingBreak").remove();
 
+    // Remove font-family from style attributes
     $("*[style]").each((_, el) => {
       const $el = $(el);
       const style = $el.attr("style") || "";
-
-      // Remove any font-family declarations
       const cleanedStyle = style
         .split(";")
         .map((s) => s.trim())
-        .filter((rule) => !/^font-family\s*:/i.test(rule)) // Remove font-family
+        .filter((rule) => !/^font-family\s*:/i.test(rule))
         .join(";");
-
       if (cleanedStyle) {
         $el.attr("style", cleanedStyle);
       } else {
@@ -188,9 +183,12 @@ const ContentPage = async ({
       }
     });
 
-    return $.html();
+    // Return only the inner HTML of the body to avoid extra <html> and <body> tags
+    return $("body").html() || $.html();
   }
 
+  
+  
   return (
     <div className="min-h-screen">
       <Head>
@@ -241,15 +239,53 @@ const ContentPage = async ({
               <div className="md:mt-6 mt-4">
                 {containsWpBlocks ? (
                   <div className="prose lg:prose-lg max-w-4xl mx-auto space-y-6 mt-5 md:mt-10 text-sm md:text-base content-custom lora-regular">
-                    {parse(processedContent)}
+                    {parse(processedContent, {
+                      replace: (domNode: any) => {
+                        if (
+                          domNode.type === "tag" &&
+                          domNode.name === "div" &&
+                          domNode.attribs &&
+                          domNode.attribs["data-type"] === "embed"
+                        ) {
+                          // Render custom embed HTML safely
+                          return (
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: domNode.attribs.html,
+                              }}
+                              style={{ width: domNode.attribs.width || "100%" }}
+                            />
+                          );
+                        }
+                        return undefined;
+                      },
+                    })}
                   </div>
                 ) : (
                   <div
-                    dangerouslySetInnerHTML={{
-                      __html: transformImgCaptions(data.content),
-                    }}
                     className="mt-5 md:mt-10 text-sm md:text-base content-custom lora-regular"
-                  ></div>
+                  >
+                    {parse(transformImgCaptions(data.content), {
+                      replace: (domNode: any) => {
+                        if (
+                          domNode.type === "tag" &&
+                          domNode.name === "div" &&
+                          domNode.attribs &&
+                          domNode.attribs["data-type"] === "embed"
+                        ) {
+                          return (
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: domNode.attribs.html,
+                              }}
+                              style={{ width: domNode.attribs.width || "100%" }}
+                            />
+                          );
+                        }
+                        return undefined;
+                      },
+                    })}
+                  </div>
                 )}
               </div>
 

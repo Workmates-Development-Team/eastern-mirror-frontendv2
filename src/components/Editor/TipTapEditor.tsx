@@ -24,6 +24,7 @@ import { ImageExtension } from "@/extensions/Image";
 import { ImagePlaceholder } from "@/extensions/image-placeholder";
 import { EmbedExtension } from "@/extensions/embed";
 import { EmbedPlaceholder } from "@/extensions/embed-placeholder";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu';
 import he from "he";
 
 const TipTapEditor = ({
@@ -40,6 +41,7 @@ const TipTapEditor = ({
   // const [content, setContent] = useState('')
 
   const [isFocusMode, setIsFocusMode] = useState(false);
+    const [contextMenuLink, setContextMenuLink] = useState<string | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -49,7 +51,7 @@ const TipTapEditor = ({
         types: ["heading", "paragraph", "blockquote"],
       }),
       Link.configure({
-        openOnClick: true,
+        openOnClick: false,
         HTMLAttributes: {
           class: "text-primary underline cursor-pointer",
         },
