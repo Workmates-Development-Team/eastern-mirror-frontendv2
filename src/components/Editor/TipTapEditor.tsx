@@ -24,8 +24,14 @@ import { ImageExtension } from "@/extensions/Image";
 import { ImagePlaceholder } from "@/extensions/image-placeholder";
 import { EmbedExtension } from "@/extensions/embed";
 import { EmbedPlaceholder } from "@/extensions/embed-placeholder";
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 import he from "he";
+import { cn } from "@/lib/utils";
 
 const TipTapEditor = ({
   content,
@@ -41,7 +47,6 @@ const TipTapEditor = ({
   // const [content, setContent] = useState('')
 
   const [isFocusMode, setIsFocusMode] = useState(false);
-    const [contextMenuLink, setContextMenuLink] = useState<string | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -124,7 +129,7 @@ const TipTapEditor = ({
     }
   }, [content, editor]);
 
-  console.log(content)
+  console.log(content);
 
   const decodeEmbeddedHtml = (html: string) => {
     const tempDiv = document.createElement("div");
@@ -142,32 +147,37 @@ const TipTapEditor = ({
     return tempDiv.innerHTML;
   };
 
+  // if (isFocusMode) {
+  //   return (
+  //     <div className="fixed inset-0 z-50 bg-white flex flex-col">
+  //       <Card className="border-0 shadow-none overflow-hidden flex-1 flex flex-col">
+  //           <EditorMenu editor={editor} isFocusMode={isFocusMode} setIsFocusMode={setIsFocusMode} />
 
-  if (isFocusMode) {
-    return (
-      <div className="fixed inset-0 z-50 bg-white flex flex-col">
-        <Card className="border-0 shadow-none overflow-hidden flex-1 flex flex-col">
-            <EditorMenu editor={editor} isFocusMode={isFocusMode} setIsFocusMode={setIsFocusMode} />
- 
-          <EditorContent 
-            editor={editor} 
-            className="prose max-w-none p-8 flex-1 overflow-auto focus:outline-none" 
-          />
+  //         <EditorContent
+  //           editor={editor}
+  //           className="prose max-w-none p-8 flex-1 overflow-auto focus:outline-none"
+  //         />
 
-        </Card>
-      </div>
-    );
-  }
+  //       </Card>
+  //     </div>
+  //   );
+  // }
+
 
   return (
-    <Card className="border shadow-sm overflow-hidden">
-      <EditorMenu editor={editor} isFocusMode={isFocusMode} setIsFocusMode={setIsFocusMode}/>
-      <EditorContent
-        editor={editor}
-        className="prose max-w-none p-4 min-h-[400px] focus:outline-none  lora-regular"
-      />
-    
-    </Card>
+    <div className={cn(isFocusMode ?"fixed inset-0 z-50 bg-white flex flex-col": '')}>
+      <Card className={cn(isFocusMode? "flex-1 flex flex-col":"", "border shadow-sm overflow-hidden")}>
+        <EditorMenu
+          editor={editor}
+          isFocusMode={isFocusMode}
+          setIsFocusMode={setIsFocusMode}
+        />
+        <EditorContent
+          editor={editor}
+          className="prose max-w-none p-4 min-h-[400px] focus:outline-none  lora-regular"
+        />
+      </Card>
+    </div>
   );
 };
 
