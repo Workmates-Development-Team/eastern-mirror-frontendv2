@@ -9,3 +9,4 @@ export const fetchBlogSlugs = async () => {
     console.log(error);
   }
 };
+  
