@@ -79,7 +79,55 @@
   }
 }
 
+/* CLS Prevention Styles */
+@layer utilities {
+  /* Prevent layout shifts from images */
+  .image-container {
+    position: relative;
+    overflow: hidden;
+  }
 
+  /* Ensure consistent text rendering */
+  .text-stable {
+    min-height: 1.2em;
+    line-height: 1.2;
+  }
+
+  /* Prevent font loading shifts */
+  .font-display-swap {
+    font-display: swap;
+  }
+
+  /* Line clamp utility for consistent text heights */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Aspect ratio utilities */
+  .aspect-16-9 {
+    aspect-ratio: 16/9;
+  }
+
+  .aspect-4-3 {
+    aspect-ratio: 4/3;
+  }
+
+  .aspect-square {
+    aspect-ratio: 1/1;
+  }
+}
+
+/* Existing styles */
 .content-custom img {
   margin: auto;
 }
@@ -87,7 +135,6 @@
 .jodit-status-bar .jodit-status-bar__item a {
   display: none;
 }
-
 
 #nprogress .bar {
   background: #0070f3; /* Custom color */
@@ -100,4 +147,19 @@
 
 #nprogress .spinner {
   display: none; /* Hides the spinner */
+}
+
+/* Font loading optimization */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Inter'), url('/fonts/inter-var.woff2') format('woff2');
+}
+
+/* Prevent FOUC (Flash of Unstyled Content) */
+html {
+  visibility: visible;
+  opacity: 1;
 }

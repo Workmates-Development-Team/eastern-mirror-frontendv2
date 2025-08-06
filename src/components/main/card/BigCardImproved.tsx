@@ -7,7 +7,7 @@ import Link from "next/link";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { formatDate } from "@/utils/date";
 
-const BigCard = ({ data }: { data: PropsType }) => {
+const BigCardImproved = ({ data }: { data: PropsType }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleShare = async () => {
@@ -44,33 +44,44 @@ const BigCard = ({ data }: { data: PropsType }) => {
 
         <Link
           href={"/" + data?.slug}
-          className="w-full md:h-[440px] h-[220px]  relative"
+          className="block w-full"
         >
-          {isLoading && (
-            <div className="absolute inset-0 bg-gray-300 animate-pulse rounded-lg"></div>
-          )}
+          {/* Fixed aspect ratio container to prevent CLS */}
+          <div 
+            className="relative w-full overflow-hidden"
+            style={{ aspectRatio: '16/9' }}
+          >
+            {isLoading && (
+              <div className="absolute inset-0 bg-gray-300 animate-pulse" />
+            )}
 
-          <Image
-            className="w-full md:h-[440px] h-[220px]  object-cover"
-            width={500}
-            height={440}
-            src={getImageUrl(data?.thumbnail)}
-            alt={data.title}
-            onLoad={() => setIsLoading(false)}
-            priority={true}
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-          />
+            <Image
+              className="object-cover transition-opacity duration-300"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              src={getImageUrl(data?.thumbnail)}
+              alt={data.title}
+              onLoad={() => setIsLoading(false)}
+              priority={true}
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+              style={{
+                opacity: isLoading ? 0 : 1,
+              }}
+            />
+          </div>
         </Link>
-        <div className="-mt-12 relative w-[95%] mx-auto">
-          <div className="bg-white md:px-[22px] px-3.5 py-2.5 shadow-md">
-            <div className="flex items-center justify-between uppercase md:text-xs text-[10px]">
-              <div>
-                <span>Published on </span>{" "}
+
+        {/* Content overlay with fixed positioning */}
+        <div className="relative -mt-12 w-[95%] mx-auto">
+          <div className="bg-white md:px-[22px] px-3.5 py-2.5 shadow-md min-h-[80px]">
+            <div className="flex items-center justify-between uppercase md:text-xs text-[10px] mb-3">
+              <div className="min-w-0 flex-1">
+                <span>Published on </span>
                 <span>{formatDate(data?.publishedAt)}</span>
               </div>
 
-              <div>
+              <div className="min-w-0 flex-1 text-right">
                 <span>BY </span>
                 {data?.author?.name ? (
                   <Link
@@ -85,24 +96,18 @@ const BigCard = ({ data }: { data: PropsType }) => {
               </div>
             </div>
             <Link href={"/" + data?.slug}>
-              <h2 className="lora-bold pt-1.5 md:text-xl text-base leading-5 sm:leading-normal">
+              <h2 className="lora-bold pt-1.5 md:text-xl text-base leading-5 sm:leading-normal min-h-[2.5rem] line-clamp-2">
                 {data?.title}
               </h2>
             </Link>
           </div>
-          {/* <div
-            dangerouslySetInnerHTML={{
-              __html: data?.content.slice(0, 137) + "...",
-            }}
-            className="md:pt-5 mt-3 md:px-5 w-[90%] md:text-sm text-xs roboto-regular text-[#646464]"
-          ></div> */}
         </div>
       </div>
     </div>
   );
 };
 
-export default BigCard;
+export default BigCardImproved;
 
 type PropsType = {
   title: string;
